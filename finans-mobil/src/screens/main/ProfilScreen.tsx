@@ -136,6 +136,9 @@ export const ProfilScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Icon name="chevronLeft" size={20} color={colors.onSurface} />
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>Profil</Text>
       </View>
 
@@ -304,10 +307,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: spacing.containerMargin,
     paddingVertical: spacing.md,
     borderBottomWidth: 1,
     borderBottomColor: colors.borderLight,
+    gap: spacing.sm,
+  },
+  backButton: {
+    padding: spacing.xs,
+    marginLeft: -spacing.xs,
   },
   headerTitle: {
     fontFamily: 'Poppins_600SemiBold',

@@ -124,9 +124,10 @@ export const raporService = {
       gunlukHarcamalar.set(tarihStr, mevcut);
     });
 
-    const gunlukArray = Array.from(gunlukHarcamalar.entries()).map(([tarih, data]) => ({
-      tarih,
-      ...data,
+    const gunlukArray = Array.from(gunlukHarcamalar.entries()).map(([tarihStr, data]) => ({
+      tarih: tarihStr,
+      miktar: data.miktar,
+      sayi: data.sayi,
       gun: GUNLER[data.tarih.getDay()],
     }));
 
@@ -261,7 +262,7 @@ export const raporService = {
       for (const kalem of butceProfili.butceKalemleri) {
         const kategoriHarcama = kategoriMap.get(kalem.kategoriId);
         const harcanan = kategoriHarcama?.toplamGider || 0;
-        const hedef = Number(kalem.miktar);
+        const hedef = Number(kalem.limitMiktar);
         const tasarruf = hedef - harcanan;
         
         kategoriHedefleri.push({
@@ -295,18 +296,28 @@ export const raporService = {
       // Takip edilen hisseler
       const hisseler = await prisma.hisseTakip.findMany({
         where: { kullaniciId },
+        include: {
+          hisse: {
+            include: {
+              fiyatlar: {
+                orderBy: { tarih: 'desc' },
+                take: 1,
+              },
+            },
+          },
+        },
         take: 5,
       });
 
-      for (const hisse of hisseler) {
-        const fiyat = Number(hisse.sonFiyat) || 100;
+      for (const t of hisseler) {
+        const fiyat = t.hisse.fiyatlar[0]?.satisFiyati || 100;
         if (fiyat > 0 && toplamTasarruf >= fiyat) {
           const adet = Math.floor(toplamTasarruf / fiyat);
           if (adet > 0) {
             yatirimOnerileri.push({
               tip: 'hisse',
-              sembol: hisse.sembol,
-              ad: hisse.sembol,
+              sembol: t.hisse.sembol,
+              ad: t.hisse.ad,
               fiyat,
               alinabilecekAdet: adet,
               toplamTutar: adet * fiyat,
@@ -320,18 +331,28 @@ export const raporService = {
       // Takip edilen kriptolar
       const kriptolar = await prisma.kriptoTakip.findMany({
         where: { kullaniciId },
+        include: {
+          kripto: {
+            include: {
+              fiyatlar: {
+                orderBy: { tarih: 'desc' },
+                take: 1,
+              },
+            },
+          },
+        },
         take: 5,
       });
 
-      for (const kripto of kriptolar) {
-        const fiyat = Number(kripto.sonFiyat) || 1;
+      for (const t of kriptolar) {
+        const fiyat = t.kripto.fiyatlar[0]?.tryFiyat || t.kripto.fiyatlar[0]?.usdFiyat || 1;
         if (fiyat > 0) {
           const adet = toplamTasarruf / fiyat;
           if (adet >= 0.0001) {
             yatirimOnerileri.push({
               tip: 'kripto',
-              sembol: kripto.sembol,
-              ad: kripto.sembol,
+              sembol: t.kripto.sembol,
+              ad: t.kripto.ad,
               fiyat,
               alinabilecekAdet: parseFloat(adet.toFixed(4)),
               toplamTutar: toplamTasarruf,
@@ -376,7 +397,7 @@ export const raporService = {
         enAktifHedefGunu,
         hedefler: hedefler.map(h => ({
           id: h.id,
-          ad: h.ad,
+          ad: h.baslik,
           hedefMiktar: Number(h.hedefMiktar),
           mevcutMiktar: Number(h.mevcutMiktar),
           ilerleme: Number(h.hedefMiktar) > 0 ? (Number(h.mevcutMiktar) / Number(h.hedefMiktar)) * 100 : 0,

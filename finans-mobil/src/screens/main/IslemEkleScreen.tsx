@@ -295,6 +295,9 @@ export const IslemEkleScreen: React.FC<Props> = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.headerIcon}>
+          <Icon name="chevronLeft" size={20} color={colors.onSurface} />
+        </TouchableOpacity>
         <Image source={AppLogo} style={styles.logo} resizeMode="contain" />
         <TouchableOpacity style={styles.headerIcon} onPress={navigateToBildirimler}>
           <Icon name="bell" size={20} color={colors.onSurface} />

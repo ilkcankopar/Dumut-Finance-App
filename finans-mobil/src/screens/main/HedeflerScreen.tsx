@@ -269,7 +269,12 @@ default: return colors.secondary;
 return (
 <SafeAreaView style={styles.container}>
 <View style={styles.header}>
+<View style={styles.headerLeft}>
+<TouchableOpacity onPress={() => navigation?.goBack()} style={styles.backButton}>
+<Icon name="chevronLeft" size={20} color={colors.onSurface} />
+</TouchableOpacity>
 <Text style={styles.headerTitle}>Hedeflerim</Text>
+</View>
 <TouchableOpacity
 style={styles.addButton}
 onPress={() => navigation?.navigate('HedefEkle')}
@@ -554,6 +559,15 @@ paddingHorizontal: spacing.containerMargin,
 paddingVertical: spacing.md,
 borderBottomWidth: 1,
 borderBottomColor: colors.borderLight,
+},
+headerLeft: {
+flexDirection: 'row',
+alignItems: 'center',
+gap: spacing.sm,
+},
+backButton: {
+padding: spacing.xs,
+marginLeft: -spacing.xs,
 },
 headerTitle: {
 fontFamily: 'Poppins_600SemiBold',
