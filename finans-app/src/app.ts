@@ -28,8 +28,28 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(helmet());
+const allowedOrigins = [
+  config.frontendUrl,
+  "http://localhost:8081",
+  "http://localhost:8080",
+  "http://localhost:8000",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
+
 app.use(cors({ 
-  origin: config.env === 'development' ? true : config.frontendUrl, 
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || config.env === 'development') {
+      return callback(null, true);
+    }
+    // Also allow any localhost port or local network IP for mobile simulation
+    if (origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:") || origin.startsWith("http://192.168.")) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  }, 
   credentials: true 
 }));
 app.use(genelRateLimit);

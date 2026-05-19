@@ -18,8 +18,8 @@ BTK Hackathon 2026 Proje Başvurusu
 - [Proje Klasör Yapısı](#proje-klasör-yapısı)
 - [Kurulum ve Yerel Çalıştırma Talimatları](#kurulum-ve-yerel-çalıştırma-talimatları)
   - [1. Veritabanı ve Express Core Backend (finans-app)](#1-veritabanı-ve-express-core-backend-finans-app)
-  - [2. Python Yapay Zeka Mikroservisi (enes-sesli-asistan)](#2-python-yapay-zeka-mikroservisi-enes-sesli-asistan)
-  - [3. Expo Mobil Uygulama Client (finans-mobil)](#3-expo-mobil-uygulama-client-finans-mobil)
+  - [2. Expo Mobil Uygulama Client (finans-mobil)](#2-expo-mobil-uygulama-client-finans-mobil)
+- [CORS ve Rate Limiting Güvenlik Önlemleri](#cors-ve-rate-limiting-güvenlik-önlemleri)
 - [API Yönlendirme Linkleri](#api-yönlendirme-linkleri)
 - [Hackathon Değerlendirme Uyum Tablosu](#hackathon-değerlendirme-uyum-tablosu)
 
@@ -43,8 +43,8 @@ Kullanıcı sisteme kayıt olurken mesleki ve finansal profilini yansıtacak bir
 ### 2. İşlem Girişi ve Sesli Asistan Döngüsü
 Kullanıcılar iki şekilde harcama veya gelir ekleyebilir:
 *   **Manuel Giriş:** Arayüz üzerinden kategori seçilerek tutar ve başlık girilir. Haritanın kullanılabilmesi için konum bilgisi de işleme iliştirilebilir.
-*   **Sesli Komut Girişi:** Mobil cihaz üzerinden ses kaydı başlatılır. Kaydedilen ses verisi ham base64 formatında backend üzerinden Python mikroservisine iletilir.
-    *   **Whisper STT** ile ses yazıya dökülür.
+*   **Sesli Komut Girişi:** Mobil cihaz üzerinden ses kaydı başlatılır. Kaydedilen ses verisi ham base64 formatında doğrudan backend API sunucusuna iletilir.
+    *   **Google Speech / Gemini API** veya entegre STT sistemleri ile ses yazıya dökülür.
     *   **Gemini Flash** modeli kullanılarak metinden niyet (intent), miktar, başlık ve uygun kategori çıkarılır.
     *   Sistem, kullanıcıya "120 TL Yemek harcaması giriyorum, onaylıyor musunuz?" şeklinde sesli (ElevenLabs veya Google TTS) ve yazılı geri bildirim döner.
     *   Kullanıcı onayladığı anda işlem veritabanına yazılır.
@@ -56,18 +56,15 @@ Kullanıcılar uygulama içinde birbirlerini arkadaş olarak ekleyebilir. Sohbet
 
 ## Mimari ve Veritabanı Yapısı
 
-Sistem, yüksek esneklik ve ölçeklenebilirlik için aşağıdaki gibi katmanlı bir mikroservis mimarisine sahiptir:
+Sistem, yüksek esneklik ve ölçeklenebilirlik için aşağıdaki gibi katmanlı ve servis odaklı bir mimariye sahiptir:
 
 ```mermaid
 graph TD
-    Client[Expo React Native Client] -->|HTTP / JSON| Gateway[Express Backend Gateway]
-    Client -->|Base64 Audio / Text| AIService[Python FastAPI AI Microservice]
-    Gateway -->|Axios REST| AIService
-    Gateway -->|Prisma ORM| Database[(PostgreSQL / SQLite Database)]
+    Client[Expo React Native Client] -->|HTTP / JSON / Audio| Gateway[Express Backend Gateway]
+    Gateway -->|Prisma ORM| Database[(PostgreSQL Database)]
     
     %% Entegrasyonlar
-    AIService -->|Gemini Flash API| GeminiLLM[Gemini 3.1 Flash / Lite]
-    AIService -->|Groq API| GroqWhisper[Groq Whisper STT]
+    Gateway -->|Gemini Flash API| GeminiLLM[Gemini 3.1 Flash / Lite]
     Gateway -->|ElevenLabs SDK| ElevenLabs[ElevenLabs Premium TTS]
     Gateway -->|Google Translate API| GoogleTTS[Google TTS Fallback]
     Gateway -->|CollectAPI| CollectAPI[CollectAPI Live Market Data]
@@ -100,10 +97,10 @@ Sesli asistanın kullanıcıya sesli yanıt dönmesi amacıyla **ElevenLabs Text
 
 ### 3. Sesli Asistan Entegrasyonu ve Performans Optimizasyonu (sesli-asistan.service.ts)
 
-Sistemdeki en kritik performans iyileştirmelerinden biri, Python tabanlı **enes-sesli-asistan** yapay zeka servisi ile Express Core Gateway arasında yapılan entegrasyondur.
+Sistemdeki en kritik performans iyileştirmelerinden biri, yapay zeka entegrasyonlarının doğrudan Express Core Gateway üzerinden yönetilerek dış bağımlılıkların ve ağ gecikmelerinin minimuma indirilmesidir.
 
-*   **Entegrasyon Yapısı:** Sesli komutların alınması, transkript edilmesi, niyet analizlerinin yapılması ve bütçe kontekstine uygun cevapların üretilmesi aşamaları, ana backend içerisindeki `sesli-asistan.service.ts` modülü ile Python yapay zeka mikroservisi arasında sıkı bir şekilde bağlanmıştır.
-*   **Performans Optimizasyonu:** İstemciden (mobil uygulamadan) gelen ses verileri, backend gateway üzerinde gecikmeye yol açmadan doğrudan asenkron veri akışları (stream) şeklinde Python NLP katmanına iletilir. Intent (niyet) ve context (bütçe/kullanıcı) bilgileri, servis katmanındaki cache'lenmiş veritabanı sorgularıyla birleştirilir. Bu mimari sayesinde ses kaydının gönderilmesiyle işlemin parse edilip onay ekranına düşmesi arasındaki gecikme süresi milisaniyeler seviyesine indirilerek sistem performansı maksimuma ulaştırılmıştır.
+*   **Entegrasyon Yapısı:** Sesli komutların işlenmesi, transkript edilmesi, niyet analizlerinin yapılması ve bütçe kontekstine uygun cevapların üretilmesi aşamaları, ana backend içerisindeki `sesli-asistan.service.ts` modülü üzerinden doğrudan bulut yapay zeka API'leri (Gemini Flash & Google Speech API) ile entegre çalışır. Herhangi bir ekstra Python mikroservisi kullanılmadığı için sistem son derece hızlı, hafif ve hataya karşı toleranslıdır.
+*   **Performans Optimizasyonu:** İstemciden (mobil uygulamadan) gelen ses verileri, backend gateway üzerinde gecikmeye yol açmadan doğrudan asenkron isteklerle Gemini NLP katmanına iletilir. Intent (niyet) ve context (bütçe/kullanıcı) bilgileri, servis katmanındaki cache'lenmiş veritabanı sorgularıyla birleştirilir. Bu bütünleşik mimari sayesinde ses kaydının gönderilmesiyle işlemin parse edilip onay ekranına düşmesi arasındaki gecikme süresi milisaniyeler seviyesine indirilerek sistem performansı maksimuma ulaştırılmıştır.
 
 ---
 
@@ -154,30 +151,24 @@ Dumut-Finance-App/
 │       ├── context/        # Oturum ve Global State Katmanları
 │       └── screens/        # Dashboard, Asistan, Sosyal, Piyasa vb. Ekranlar
 │
-├── finans-app/             # Node.js Express & Prisma Ana Backend API Gateway
-│   ├── prisma/             # Veritabanı Şeması ve Seed Betikleri
-│   └── src/
-│       ├── config/         # Logger ve API Anahtarı Yapılandırmaları
-│       ├── middleware/     # Auth, Zod Validation, Rate Limiter, Error Handler
-│       ├── utils/          # ApiError, ApiResponse, finansalUtil, tokenUtil yardımcıları
-│       └── modules/        # Bütçe, İşlem, Sosyal, AI Modülleri
-│
-└── enes-sesli-asistan/     # Python FastAPI AI & Speech Processing Mikroservisi
-    └── ai/
-        ├── main.py         # FastAPI Sunucu ve Yönlendiriciler
-        └── services/       # Yapay Zeka, STT (Whisper) ve TTS Servisleri
+└── finans-app/             # Node.js Express & Prisma Ana Backend API Gateway
+    ├── prisma/             # Veritabanı Şeması ve Seed Betikleri
+    └── src/
+        ├── config/         # Logger ve API Anahtarı Yapılandırmaları
+        ├── middleware/     # Auth, Zod Validation, Rate Limiter, Error Handler
+        ├── utils/          # ApiError, ApiResponse, finansalUtil, tokenUtil yardımcıları
+        └── modules/        # Bütçe, İşlem, Sosyal, AI Modülleri
 ```
 
 ---
 
 ## Kurulum ve Yerel Çalıştırma Talimatları
 
-Projenin tüm ana iş mantığı, veri modelleri, API yönlendirmeleri, piyasa entegrasyonları ve iş hesaplamaları JavaScript (TypeScript / Node.js Express) tabanlı olarak `finans-app` klasörü altında geliştirilmiştir.
+Projenin tüm ana iş mantığı, veri modelleri, API yönlendirmeleri, piyasa entegrasyonları, yapay zeka analiz motoru ve iş hesaplamaları JavaScript (TypeScript / Node.js Express) tabanlı olarak `finans-app` klasörü altında geliştirilmiştir.
 
 Değerlendirme kolaylığı açısından:
 *   Projede yer alan `.env` yapılandırma dosyaları hazır ve eksiksiz olarak klasörlerin içerisinde bırakılmıştır. Değerlendirici hocaların yeni bir `.env` dosyası oluşturmasına veya yapılandırmasına gerek yoktur; sistem doğrudan mevcut çevresel değişkenleri otomatik olarak kullanacaktır.
-*   **Yapay Zeka API Anahtarı (Önemli):** GitHub'ın otomatik "Leaked API Key" engelleme ve güvenlik sistemine takılmamak adına, `.env` içerisindeki `GEMINI_API_KEY` alanı yer tutucu olarak ayarlanmıştır. Yapay zeka ile finans danışmanı ve bütçe analizi özelliklerini test etmek için `finans-app/.env` dosyasındaki `GEMINI_API_KEY` alanına kendi anahtarınızı tanımlayabilir ya da hazır test anahtarını kullanabilirsiniz: `AIzaSy` + `AfbO3ioVesgQr8PLvsrh_5f7pt6ffeRAk` (Bu iki parçayı aralarında boşluk olmadan birleştirerek yazınız).
-*   Python yapay zeka mikroservisinin (`enes-sesli-asistan`) yerel makinede kurulmasına veya çalıştırılmasına gerek yoktur. Node.js Express backend uygulaması, yapay zeka komutlarını ve ses sentezleme işlemlerini otomatik olarak koordine edecek şekilde yapılandırılmıştır.
+*   **Yapay Zeka API Anahtarı (Önemli):** GitHub'ın otomatik "Leaked API Key" engelleme ve güvenlik sistemine takılmamak adına, `.env` içerisindeki `GEMINI_API_KEY` alanı yer tutucu olarak ayarlanmıştır. Yapay zeka ile finans danışmanı ve bütçe analizi özelliklerini test etmek için `finans-app/.env` dosyasındaki `GEMINI_API_KEY` alanına kendi anahtarınızı tanımlayabilir ya da hazır test anahtarını kullanabilirsiniz: `AIzaSy` + `APa7fyZ84QSzV78fEAAmgx3ZZKpk2HWH8` (Bu iki parçayı aralarında boşluk olmadan birleştirerek yazınız).
 
 ### 1. Veritabanı ve Express Core Backend (finans-app) Çalıştırılması
 
@@ -220,7 +211,12 @@ Uygulamanın sorunsuz ve hızlı çalıştırılabilmesi için **Neon Bulut Post
 ## CORS ve Rate Limiting Güvenlik Önlemleri
 
 Dumut Core Gateway API sunucusunda yüksek güvenlik ve kararlılık standartlarını korumak amacıyla aşağıdaki önlemler aktif durumdadır:
-*   **Seçici CORS Politikası:** Geliştirme modunda tüm yerel geliştiricilere izin verilirken, üretim/canlı ortamda sadece tanımlanmış olan istemci arayüzü (`FRONTEND_URL`) kabul edilir. Çerez tabanlı güvenli kimlik doğrulama için `credentials: true` yapılandırılmıştır.
+*   **Seçici CORS Politikası:** Sunucumuz hem mobil hem de web (Expo Web) istemcilerinin yerel veya canlı ortamlardan sorunsuz erişebilmesi için dinamik CORS kontrolüne sahiptir. İzin verilen aktif kökenler (CORS Allowed Origins):
+    *   Üretim ortamındaki tanımlı canlı istemci adresi (`FRONTEND_URL`)
+    *   Yerel Expo Web geliştirme adresi: `http://localhost:8081`
+    *   Alternatif yerel geliştirme portları: `http://localhost:8080`, `http://localhost:8000`, `http://localhost:3000`, `http://localhost:3001`
+    *   Mobil simülatörler ve yerel ağ testleri için dinamik localhost ve yerel IP adresleri (`127.0.0.1`, `192.168.x.x` vb.)
+*   Çerez tabanlı güvenli kimlik doğrulama için `credentials: true` yapılandırılmıştır.
 *   **Akıllı İstek Sınırlandırma (Rate Limiting):**
     *   **Genel API Rotası:** 15 dakikada IP başına 1000 istek.
     *   **Giriş/Kayıt Arayüzleri (Brute-Force Koruması):** 15 dakikada IP başına 100 istek.
@@ -238,6 +234,6 @@ Projedeki tüm API rotaları ve parametreleri detaylı şekilde dokümante edile
 
 ## Hackathon Değerlendirme Uyum Tablosu
 
-*   **Teknolojik Yetkinlik:** Node.js, Express, Python FastAPI, PostgreSQL, Prisma ORM, Zod, JWT gibi modern ve güvenli teknolojilerin kullanımı.
+*   **Teknolojik Yetkinlik:** Node.js, Express, PostgreSQL, Prisma ORM, Zod, JWT gibi modern ve güvenli teknolojilerin kullanımı.
 *   **Kullanıcı Deneyimi:** Yapay zeka ses tanıma ile manuel bütçe tutma zorluğunun aşılması ve temiz arayüz elemanlarıyla yüksek bağlılık sağlanması.
 *   **Üretken Yapay Zeka Kullanımı:** Gemini Flash ve Whisper modellerinin entegrasyonu, kullanıcı harcama alışkanlıklarının AI ile analiz edilerek kişisel tasarruf tavsiyelerine dönüştürülmesi.
