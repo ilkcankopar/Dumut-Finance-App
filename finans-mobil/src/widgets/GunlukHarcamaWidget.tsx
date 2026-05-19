@@ -32,8 +32,9 @@ export function GunlukHarcamaWidget({ isLoggedIn = false, gunlukHarcama = 0, gun
             alignItems: 'center',
             marginBottom: 12,
           }}
+          clickAction="OPEN_APP"
         >
-          <TextWidget text="◆" style={{ fontSize: 24, color: '#FFFFFF', fontWeight: '800' }} />
+          <TextWidget text="₺" style={{ fontSize: 24, color: '#FFFFFF', fontWeight: '800' }} />
         </FlexWidget>
         <TextWidget 
           text="GÜNLÜK HARCAMA" 
@@ -71,9 +72,23 @@ export function GunlukHarcamaWidget({ isLoggedIn = false, gunlukHarcama = 0, gun
           alignItems: 'center',
           width: 'match_parent',
         }}
+        clickAction="OPEN_APP"
       >
-        <FlexWidget style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TextWidget text="◆ " style={{ fontSize: 14, color: '#FFFFFF', fontWeight: '900' }} />
+        <FlexWidget style={{ flexDirection: 'row', alignItems: 'center' }} clickAction="OPEN_APP">
+          <FlexWidget
+            style={{
+              width: 22,
+              height: 22,
+              backgroundColor: '#262626',
+              borderRadius: 11,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: 8,
+            }}
+            clickAction="OPEN_APP"
+          >
+            <TextWidget text="₺" style={{ fontSize: 12, color: '#FFFFFF', fontWeight: '900' }} />
+          </FlexWidget>
           <TextWidget 
             text="GÜNLÜK HARCAMA" 
             style={{ fontSize: 13, fontWeight: '800', color: '#FFFFFF' }} 
@@ -86,6 +101,7 @@ export function GunlukHarcamaWidget({ isLoggedIn = false, gunlukHarcama = 0, gun
             paddingVertical: 4,
             borderRadius: 12,
           }}
+          clickAction="OPEN_APP"
         >
           <TextWidget 
             text={`%${yuzde}`} 
@@ -94,14 +110,14 @@ export function GunlukHarcamaWidget({ isLoggedIn = false, gunlukHarcama = 0, gun
         </FlexWidget>
       </FlexWidget>
 
-      <FlexWidget style={{ width: 'match_parent', marginVertical: 8 }}>
+      <FlexWidget style={{ width: 'match_parent', marginVertical: 8 }} clickAction="OPEN_APP">
         <TextWidget 
           text={`${gunlukHarcama.toLocaleString('tr-TR')} ₺`} 
           style={{ fontSize: 32, fontWeight: '900', color: '#FFFFFF' }} 
         />
       </FlexWidget>
 
-      <FlexWidget style={{ width: 'match_parent' }}>
+      <FlexWidget style={{ width: 'match_parent' }} clickAction="OPEN_APP">
         <FlexWidget
           style={{
             width: 'match_parent',
@@ -111,6 +127,7 @@ export function GunlukHarcamaWidget({ isLoggedIn = false, gunlukHarcama = 0, gun
             marginBottom: 8,
             flexDirection: 'row',
           }}
+          clickAction="OPEN_APP"
         >
           <FlexWidget
             style={{
@@ -119,12 +136,14 @@ export function GunlukHarcamaWidget({ isLoggedIn = false, gunlukHarcama = 0, gun
               backgroundColor: limitAsimi ? '#EF4444' : '#FFFFFF',
               borderRadius: 3,
             }}
+            clickAction="OPEN_APP"
           />
           <FlexWidget
             style={{
               flex: Math.max(100 - yuzde, 0),
               height: 6,
             }}
+            clickAction="OPEN_APP"
           />
         </FlexWidget>
 

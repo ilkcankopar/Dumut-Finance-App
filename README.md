@@ -165,7 +165,12 @@ Dumut-Finance-App/
 ## Kurulum ve Yerel Çalıştırma Talimatları
 
 > [!IMPORTANT]
-> **Canlı Canlı API Sunucusu (Railway Entegrasyonu):**
+> **Hazır Android APK Dosyası & Canlı Bulut Derlemesi:**
+> Uygulamayı cihazınızda veya bir emülatörde hemen test etmek için aşağıdaki derlenmiş APK dosyalarından birini indirip kurabilirsiniz:
+> *   💾 **Doğrudan APK İndir (GitHub):** [dumut.apk](./dumut.apk) *(Dosyayı projenin kök dizininde bulabilir veya buraya tıklayarak yerel repodan indirebilirsiniz)*
+> *   ⚡ **EAS Bulut APK Bağlantısı:** [Expo EAS APK İndirme Linki](https://expo.dev/artifacts/eas/tPL23iZzJ6uM8fyBJNUHC.apk) *(Expo bulut sunucuları tarafından derlenen resmi APK çıktısı)*
+> 
+> **Canlı API Sunucusu (Railway Entegrasyonu):**
 > Projemizin Express backend API katmanı ve Neon PostgreSQL veritabanı bulut üzerinde (Railway) **7/24 aktif ve canlı olarak çalışmaktadır.** Canlı API adresi: `https://dumut-finance-app-production.up.railway.app/api/v1`
 > 
 > Bu sayede, uygulamayı değerlendirmek ve test etmek için **yerel bilgisayarda backend (`finans-app`) sunucusu ve veritabanı kurmanıza veya çalıştırmanıza GEREK YOKTUR.** Mobil istemci (`finans-mobil`), bu canlı API sunucusuna doğrudan bağlanacak şekilde hazır yapılandırılmıştır. Doğrudan [Adım 2: Expo Mobil Uygulama Client Çalıştırılması](#2-expo-mobil-uygulama-client-finans-mobil-çalıştırılması) adımıyla test etmeye başlayabilirsiniz.
@@ -176,9 +181,12 @@ Dumut-Finance-App/
 > *   **E-posta:** `ilkcankopar33@gmail.com`
 > *   **Şifre:** `enderbey123A!`
 > 
-> **Öne Çıkan Test Senaryoları & Özellikler:**
-> *   **Konum Bazlı Harcama Takibi (Harita Raporu):** Harcama yaparken konum bilgisini kaydedebilirsiniz. Örneğin; *Kadıköy* konumunu seçip *"Kadıköy'den Kahve Alındı"* gibi harcamalar ekleyebilir, harcama detayında ve harita üzerinde bu konumları görselleştirebilirsiniz.
-> *   **Ana Ekran Widget Desteği (Kaynak Kodlarında Mevcut):** Kaynak kodlarımızda entegre olarak yer alan Android Widget yapısı sayesinde bütçe özetinizi, harcama ve tasarruf hedeflerinizi cihazın ana ekranına yerleştirebilirsiniz (kod seviyesinde `react-native-android-widget` entegrasyonu mevcuttur).
+> **Öne Çıkan Test Senaryoları & Gelişmiş Özellikler:**
+> *   🗺️ **Harcama Coğrafyası (Konum Bazlı Harita Takibi):** Android cihazlarda native haritaların çökme olasılığını tamamen ortadan kaldırmak için Leaflet.js tabanlı, kararlı ve son derece akıcı bir interaktif WebView haritası geliştirildi. Kullanıcılar yaptıkları harcamaları harita üzerinde konum işaretçileriyle (Örn: Kadıköy'den kahve alımı, Beşiktaş'ta yemek) görebilir, üzerlerine dokunarak harcama detay pencerelerine (popup) erişebilir.
+> *   📱 **Premium Android Widget Setleri (Ana Ekrandan Hızlı Kontrol):** Android işletim sistemiyle tam entegre, siyah-beyaz minimalist tasarıma sahip modern ve kurumsal widget'lar geliştirildi:
+>     *   **Günlük Harcama Widget'ı (₺):** Günlük bütçeyi ve harcama limitini tek bakışta gösterir.
+>     *   **Hedef Takip Widget'ı (%):** Finansal hedeflerin tamamlanma oranlarını dairesel ikonlarla dinamik olarak yansıtır.
+>     *   **Sesli Asistan Widget'ı (AI):** Cihazın ana ekranından tek bir dokunuşla sesli asistana (`finans://asistan?voice=true` deep link URI'si aracılığıyla) yönlendirerek doğrudan konuşma/kayıt işlemini başlatır. Dokunma hassasiyetinin Android işletim sisteminde kusursuz olması için tıklama dinleyicileri tüm container ve flex katmanlarına yayılarak optimize edildi.
 
 ### 1. (Opsiyonel) Yerel Express Backend (finans-app) Çalıştırılması
 

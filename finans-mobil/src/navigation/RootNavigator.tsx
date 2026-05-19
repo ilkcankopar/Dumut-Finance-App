@@ -12,7 +12,7 @@ const linking = {
   config: {
     screens: {
       MainTabs: {
-        path: 'main',
+        path: '',
         screens: {
           Asistan: {
             path: 'asistan',

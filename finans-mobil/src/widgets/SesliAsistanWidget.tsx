@@ -30,8 +30,9 @@ export function SesliAsistanWidget({ isLoggedIn = false }: Props) {
             alignItems: 'center',
             marginBottom: 12,
           }}
+          clickAction="OPEN_APP"
         >
-          <TextWidget text="🎙️" style={{ fontSize: 24 }} />
+          <TextWidget text="AI" style={{ fontSize: 18, color: '#FFFFFF', fontWeight: '900' }} />
         </FlexWidget>
         <TextWidget 
           text="SESLİ ASİSTAN" 
@@ -56,7 +57,8 @@ export function SesliAsistanWidget({ isLoggedIn = false }: Props) {
         borderRadius: 24,
         padding: 20,
       }}
-      clickAction="finans://asistan?voice=true"
+      clickAction="OPEN_URI"
+      clickActionData={{ uri: 'finans://asistan?voice=true' }}
     >
       <FlexWidget
         style={{
@@ -68,8 +70,10 @@ export function SesliAsistanWidget({ isLoggedIn = false }: Props) {
           alignItems: 'center',
           marginBottom: 12,
         }}
+        clickAction="OPEN_URI"
+        clickActionData={{ uri: 'finans://asistan?voice=true' }}
       >
-        <TextWidget text="🎙️" style={{ fontSize: 28 }} />
+        <TextWidget text="AI" style={{ fontSize: 22, color: '#000000', fontWeight: '900' }} />
       </FlexWidget>
 
       <TextWidget 

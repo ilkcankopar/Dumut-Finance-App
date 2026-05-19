@@ -61,6 +61,14 @@ async function mockData() {
     { baslik: 'Part-time', kategori: 'Part-time İş', min: 3000, max: 5000 },
   ];
 
+  const istanbulKonumlar = [
+    { konumAd: 'Kadıköy', enlem: 40.9901, boylam: 29.0278 },
+    { konumAd: 'Beşiktaş', enlem: 41.0428, boylam: 29.0075 },
+    { konumAd: 'Üsküdar', enlem: 41.0267, boylam: 29.0155 },
+    { konumAd: 'Şişli', enlem: 41.0600, boylam: 28.9870 },
+    { konumAd: 'Beyoğlu', enlem: 41.0370, boylam: 28.9850 },
+  ];
+
   // 30 gün için işlemler oluştur
   for (let i = 0; i < 30; i++) {
     const tarih = new Date(now);
@@ -72,6 +80,10 @@ async function mockData() {
       const ornek = giderOrnekleri[Math.floor(Math.random() * giderOrnekleri.length)];
       const kategori = giderKategorileri.find(k => k.ad === ornek.kategori);
       if (kategori) {
+        // %80 ihtimalle konum ekle
+        const konumEkle = Math.random() < 0.8;
+        const konum = konumEkle ? istanbulKonumlar[Math.floor(Math.random() * istanbulKonumlar.length)] : null;
+
         islemler.push({
           kullaniciId: kullanici.id,
           kategoriId: kategori.id,
@@ -79,6 +91,9 @@ async function mockData() {
           baslik: ornek.baslik,
           miktar: Math.floor(Math.random() * (ornek.max - ornek.min + 1)) + ornek.min,
           tarih: tarih,
+          enlem: konum ? konum.enlem : null,
+          boylam: konum ? konum.boylam : null,
+          konumAd: konum ? konum.konumAd : null,
         });
       }
     }
@@ -95,6 +110,9 @@ async function mockData() {
           baslik: ornek.baslik,
           miktar: Math.floor(Math.random() * (ornek.max - ornek.min + 1)) + ornek.min,
           tarih: tarih,
+          enlem: null,
+          boylam: null,
+          konumAd: null,
         });
       }
     }
