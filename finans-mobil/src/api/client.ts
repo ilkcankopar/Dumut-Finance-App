@@ -4,9 +4,6 @@ import { Platform } from 'react-native';
 import { config } from '../config';
 
 const getBaseUrl = () => {
-  if (Platform.OS === 'web') {
-    return 'http://localhost:3000/api/v1';
-  }
   return config.apiUrl;
 };
 
