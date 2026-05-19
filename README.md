@@ -223,6 +223,18 @@ Değerlendirme kolaylığı açısından:
 
 ---
 
+## CORS ve Rate Limiting Güvenlik Önlemleri
+
+Dumut Core Gateway API sunucusunda yüksek güvenlik ve kararlılık standartlarını korumak amacıyla aşağıdaki önlemler aktif durumdadır:
+*   **Seçici CORS Politikası:** Geliştirme modunda tüm yerel geliştiricilere izin verilirken, üretim/canlı ortamda sadece tanımlanmış olan istemci arayüzü (`FRONTEND_URL`) kabul edilir. Çerez tabanlı güvenli kimlik doğrulama için `credentials: true` yapılandırılmıştır.
+*   **Akıllı İstek Sınırlandırma (Rate Limiting):**
+    *   **Genel API Rotası:** 15 dakikada IP başına 1000 istek.
+    *   **Giriş/Kayıt Arayüzleri (Brute-Force Koruması):** 15 dakikada IP başına 100 istek.
+    *   **AI Sesli Asistan İstekleri:** 1 dakikada IP başına 20 istek.
+*   **Helmet HTTP Güvenliği:** Sunucu yanıtlarındaki HTTP başlıkları (headers) otomatik olarak zırhlanarak XSS, Tıklama Kaçırma (Clickjacking) ve MIME-sniffing gibi yaygın saldırı yöntemleri engellenmiştir.
+
+---
+
 ## API Yönlendirme Linkleri
 
 Projedeki tüm API rotaları ve parametreleri detaylı şekilde dokümante edilerek ayrı bir dosyada toplanmıştır.
