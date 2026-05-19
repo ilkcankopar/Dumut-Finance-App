@@ -188,16 +188,20 @@ Değerlendirme kolaylığı açısından:
     ```bash
     npm install
     ```
-3.  Veritabanı tablolarını senkronize edin (Mevcut yapılandırma SQLite/PostgreSQL için hazırdır):
+3.  Docker konteyneri üzerinden PostgreSQL veritabanını başlatın:
+    ```bash
+    docker-compose up -d
+    ```
+4.  Veritabanı tablolarını senkronize edin (Prisma şemasını veritabanına uygulayın):
     ```bash
     npx prisma generate
     npm run db:push
     ```
-4.  Gerekli başlangıç verilerini sisteme tohumlayın (Seeding):
+5.  Gerekli başlangıç verilerini sisteme tohumlayın (Seeding):
     ```bash
     npm run db:seed
     ```
-5.  Backend sunucusunu başlatın:
+6.  Backend sunucusunu başlatın:
     ```bash
     npm run dev
     ```
