@@ -164,13 +164,15 @@ Dumut-Finance-App/
 
 ## Kurulum ve Yerel Çalıştırma Talimatları
 
-Projenin tüm ana iş mantığı, veri modelleri, API yönlendirmeleri, piyasa entegrasyonları, yapay zeka analiz motoru ve iş hesaplamaları JavaScript (TypeScript / Node.js Express) tabanlı olarak `finans-app` klasörü altında geliştirilmiştir.
+> [!IMPORTANT]
+> **Canlı Canlı API Sunucusu (Railway Entegrasyonu):**
+> Projemizin Express backend API katmanı ve Neon PostgreSQL veritabanı bulut üzerinde (Railway) **7/24 aktif ve canlı olarak çalışmaktadır.** Canlı API adresi: `https://dumut-finance-app-production.up.railway.app/api/v1`
+> 
+> Bu sayede, uygulamayı değerlendirmek ve test etmek için **yerel bilgisayarda backend (`finans-app`) sunucusu ve veritabanı kurmanıza veya çalıştırmanıza GEREK YOKTUR.** Mobil istemci (`finans-mobil`), bu canlı API sunucusuna doğrudan bağlanacak şekilde hazır yapılandırılmıştır. Doğrudan [Adım 2: Expo Mobil Uygulama Client Çalıştırılması](#2-expo-mobil-uygulama-client-finans-mobil-çalıştırılması) adımıyla test etmeye başlayabilirsiniz.
 
-Değerlendirme kolaylığı açısından:
-*   Projede yer alan `.env` yapılandırma dosyaları hazır ve eksiksiz olarak klasörlerin içerisinde bırakılmıştır. Değerlendirici hocaların yeni bir `.env` dosyası oluşturmasına veya yapılandırmasına gerek yoktur; sistem doğrudan mevcut çevresel değişkenleri otomatik olarak kullanacaktır.
-*   **Yapay Zeka API Anahtarı (Önemli):** GitHub'ın otomatik "Leaked API Key" engelleme ve güvenlik sistemine takılmamak adına, `.env` içerisindeki `GEMINI_API_KEY` alanı yer tutucu olarak ayarlanmıştır. Yapay zeka ile finans danışmanı ve bütçe analizi özelliklerini test etmek için `finans-app/.env` dosyasındaki `GEMINI_API_KEY` alanına kendi anahtarınızı tanımlayabilir ya da hazır test anahtarını kullanabilirsiniz: `AIzaSy` + `APa7fyZ84QSzV78fEAAmgx3ZZKpk2HWH8` (Bu iki parçayı aralarında boşluk olmadan birleştirerek yazınız).
+### 1. (Opsiyonel) Yerel Express Backend (finans-app) Çalıştırılması
 
-### 1. Veritabanı ve Express Core Backend (finans-app) Çalıştırılması
+Eğer backend sunucusunu ve veritabanı bağlantılarını kendi yerel bilgisayarınızda çalıştırmak isterseniz aşağıdaki adımları takip edebilirsiniz:
 
 Uygulamanın sorunsuz ve hızlı çalıştırılabilmesi için **Neon Bulut PostgreSQL Veritabanı** bağlantısı ve gerekli başlangıç verileri (hazır kullanıcılar, 300'den fazla işlem, kategoriler ve sistem ayarları) doğrudan `.env` dosyasına entegre edilmiştir. Bu sayede yerel bilgisayara herhangi bir veritabanı kurmaya gerek kalmadan sistem doğrudan çalışmaya hazırdır.
 
