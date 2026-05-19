@@ -170,6 +170,16 @@ Dumut-Finance-App/
 > 
 > Bu sayede, uygulamayı değerlendirmek ve test etmek için **yerel bilgisayarda backend (`finans-app`) sunucusu ve veritabanı kurmanıza veya çalıştırmanıza GEREK YOKTUR.** Mobil istemci (`finans-mobil`), bu canlı API sunucusuna doğrudan bağlanacak şekilde hazır yapılandırılmıştır. Doğrudan [Adım 2: Expo Mobil Uygulama Client Çalıştırılması](#2-expo-mobil-uygulama-client-finans-mobil-çalıştırılması) adımıyla test etmeye başlayabilirsiniz.
 
+> [!TIP]
+> **Hazır Test Hesabı Bilgileri:**
+> Uygulamayı hemen canlı verilerle denemek için aşağıdaki hazır hesabı kullanabilirsiniz:
+> *   **E-posta:** `ilkcankopar33@gmail.com`
+> *   **Şifre:** `enderbey123A!`
+> 
+> **Öne Çıkan Test Senaryoları & Özellikler:**
+> *   **Konum Bazlı Harcama Takibi (Harita Raporu):** Harcama yaparken konum bilgisini kaydedebilirsiniz. Örneğin; *Kadıköy* konumunu seçip *"Kadıköy'den Kahve Alındı"* gibi harcamalar ekleyebilir, harcama detayında ve harita üzerinde bu konumları görselleştirebilirsiniz.
+> *   **Ana Ekran Widget Desteği (Kaynak Kodlarında Mevcut):** Kaynak kodlarımızda entegre olarak yer alan Android Widget yapısı sayesinde bütçe özetinizi, harcama ve tasarruf hedeflerinizi cihazın ana ekranına yerleştirebilirsiniz (kod seviyesinde `react-native-android-widget` entegrasyonu mevcuttur).
+
 ### 1. (Opsiyonel) Yerel Express Backend (finans-app) Çalıştırılması
 
 Eğer backend sunucusunu ve veritabanı bağlantılarını kendi yerel bilgisayarınızda çalıştırmak isterseniz aşağıdaki adımları takip edebilirsiniz:
