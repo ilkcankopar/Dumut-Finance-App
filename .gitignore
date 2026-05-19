@@ -18,6 +18,7 @@ __pycache__/
 *.pyc
 
 # Local environment and secret files
+.env
 .env.local
 .env.*.local
 *.log
