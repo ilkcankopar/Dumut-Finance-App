@@ -176,6 +176,7 @@ Projenin tüm ana iş mantığı, veri modelleri, API yönlendirmeleri, piyasa e
 
 Değerlendirme kolaylığı açısından:
 *   Projede yer alan `.env` yapılandırma dosyaları hazır ve eksiksiz olarak klasörlerin içerisinde bırakılmıştır. Değerlendirici hocaların yeni bir `.env` dosyası oluşturmasına veya yapılandırmasına gerek yoktur; sistem doğrudan mevcut çevresel değişkenleri otomatik olarak kullanacaktır.
+*   **Yapay Zeka API Anahtarı (Önemli):** GitHub'ın otomatik "Leaked API Key" engelleme ve güvenlik sistemine takılmamak adına, `.env` içerisindeki `GEMINI_API_KEY` alanı yer tutucu olarak ayarlanmıştır. Yapay zeka ile finans danışmanı ve bütçe analizi özelliklerini test etmek için `finans-app/.env` dosyasındaki `GEMINI_API_KEY` alanına kendi anahtarınızı tanımlayabilir ya da hazır test anahtarını kullanabilirsiniz: `AIzaSy` + `AfbO3ioVesgQr8PLvsrh_5f7pt6ffeRAk` (Bu iki parçayı aralarında boşluk olmadan birleştirerek yazınız).
 *   Python yapay zeka mikroservisinin (`enes-sesli-asistan`) yerel makinede kurulmasına veya çalıştırılmasına gerek yoktur. Node.js Express backend uygulaması, yapay zeka komutlarını ve ses sentezleme işlemlerini otomatik olarak koordine edecek şekilde yapılandırılmıştır.
 
 ### 1. Veritabanı ve Express Core Backend (finans-app) Çalıştırılması

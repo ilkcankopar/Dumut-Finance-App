@@ -551,7 +551,9 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.borderLight,
   },
   tavsiyeBtn: {
-    backgroundColor: colors.primaryContainer,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#e8e8e8',
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     borderRadius: 12,
@@ -559,7 +561,7 @@ const styles = StyleSheet.create({
   tavsiyeBtnText: {
     fontFamily: 'Poppins_500Medium',
     fontSize: 11,
-    color: colors.primary,
+    color: '#1a1a1a',
   },
   kategoriToplam: {
     flexDirection: 'row',
