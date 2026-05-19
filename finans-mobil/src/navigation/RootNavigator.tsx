@@ -7,6 +7,25 @@ import { OnboardingNavigator } from './OnboardingNavigator';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { colors } from '../theme';
 
+const linking = {
+  prefixes: ['finans://'],
+  config: {
+    screens: {
+      MainTabs: {
+        path: 'main',
+        screens: {
+          Asistan: {
+            path: 'asistan',
+          },
+          Pano: {
+            path: 'pano',
+          }
+        }
+      }
+    }
+  }
+};
+
 export const RootNavigator: React.FC = () => {
   const { isAuthenticated, isLoading, isOnboardingComplete } = useAuth();
 
@@ -26,7 +45,7 @@ export const RootNavigator: React.FC = () => {
   };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       {getNavigator()}
     </NavigationContainer>
   );

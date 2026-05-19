@@ -20,7 +20,7 @@ export function HedefWidget({
         style={{
           height: 'match_parent',
           width: 'match_parent',
-          backgroundColor: '#1E293B',
+          backgroundColor: '#000000',
           justifyContent: 'center',
           alignItems: 'center',
           borderRadius: 24,
@@ -32,22 +32,22 @@ export function HedefWidget({
           style={{
             width: 56,
             height: 56,
-            backgroundColor: '#334155',
+            backgroundColor: '#262626',
             borderRadius: 28,
             justifyContent: 'center',
             alignItems: 'center',
             marginBottom: 12,
           }}
         >
-          <TextWidget text="🎯" style={{ fontSize: 28 }} />
+          <TextWidget text="◎" style={{ fontSize: 24, color: '#FFFFFF', fontWeight: '800' }} />
         </FlexWidget>
         <TextWidget 
-          text="Hedef Takibi" 
-          style={{ fontSize: 16, fontWeight: '700', color: '#F8FAFC', marginBottom: 4 }} 
+          text="HEDEF TAKİBİ" 
+          style={{ fontSize: 14, fontWeight: '800', color: '#FFFFFF', marginBottom: 4 }} 
         />
         <TextWidget 
           text="Giriş yapmak için dokunun" 
-          style={{ fontSize: 12, color: '#94A3B8' }} 
+          style={{ fontSize: 11, color: '#A3A3A3' }} 
         />
       </FlexWidget>
     );
@@ -55,13 +55,14 @@ export function HedefWidget({
 
   const yuzde = hedefMiktar > 0 ? Math.round((mevcutMiktar / hedefMiktar) * 100) : 0;
   const kalan = hedefMiktar - mevcutMiktar;
+  const hedefUlasildi = kalan <= 0;
 
   return (
     <FlexWidget
       style={{
         height: 'match_parent',
         width: 'match_parent',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: '#000000',
         borderRadius: 24,
         padding: 20,
         flexDirection: 'column',
@@ -78,15 +79,15 @@ export function HedefWidget({
         }}
       >
         <FlexWidget style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <TextWidget text="🎯 " style={{ fontSize: 16 }} />
+          <TextWidget text="◎ " style={{ fontSize: 14, color: '#FFFFFF', fontWeight: '900' }} />
           <TextWidget 
-            text={hedefAdi} 
-            style={{ fontSize: 15, fontWeight: '700', color: '#0F172A' }} 
+            text={hedefAdi.toUpperCase()} 
+            style={{ fontSize: 13, fontWeight: '800', color: '#FFFFFF' }} 
           />
         </FlexWidget>
         <FlexWidget
           style={{
-            backgroundColor: '#F1F5F9',
+            backgroundColor: '#262626',
             paddingHorizontal: 8,
             paddingVertical: 4,
             borderRadius: 12,
@@ -94,7 +95,7 @@ export function HedefWidget({
         >
           <TextWidget 
             text={`%${Math.min(yuzde, 100)}`} 
-            style={{ fontSize: 12, fontWeight: '700', color: '#64748B' }} 
+            style={{ fontSize: 11, fontWeight: '800', color: '#FFFFFF' }} 
           />
         </FlexWidget>
       </FlexWidget>
@@ -102,7 +103,7 @@ export function HedefWidget({
       <FlexWidget style={{ width: 'match_parent', marginVertical: 8 }}>
         <TextWidget 
           text={`${mevcutMiktar.toLocaleString('tr-TR')} ₺`} 
-          style={{ fontSize: 32, fontWeight: '800', color: '#0F172A' }} 
+          style={{ fontSize: 32, fontWeight: '900', color: '#FFFFFF' }} 
         />
       </FlexWidget>
 
@@ -110,9 +111,9 @@ export function HedefWidget({
         <FlexWidget
           style={{
             width: 'match_parent',
-            height: 8,
-            backgroundColor: '#E2E8F0',
-            borderRadius: 4,
+            height: 6,
+            backgroundColor: '#262626',
+            borderRadius: 3,
             marginBottom: 8,
             flexDirection: 'row',
           }}
@@ -120,25 +121,24 @@ export function HedefWidget({
           <FlexWidget
             style={{
               flex: Math.min(yuzde, 100),
-              height: 8,
-              backgroundColor: '#3B82F6',
-              borderRadius: 4,
+              height: 6,
+              backgroundColor: hedefUlasildi ? '#10B981' : '#FFFFFF',
+              borderRadius: 3,
             }}
           />
           <FlexWidget
             style={{
               flex: Math.max(100 - yuzde, 0),
-              height: 8,
+              height: 6,
             }}
           />
         </FlexWidget>
 
         <TextWidget 
-          text={kalan > 0 ? `Hedefe: ${kalan.toLocaleString('tr-TR')} ₺ kaldı` : `Hedefe ulaşıldı! 🎉`} 
-          style={{ fontSize: 13, fontWeight: '600', color: kalan > 0 ? '#64748B' : '#10B981' }} 
+          text={hedefUlasildi ? `Hedefe ulaşıldı! ✓` : `Hedefe: ${kalan.toLocaleString('tr-TR')} ₺ kaldı`} 
+          style={{ fontSize: 12, fontWeight: '700', color: hedefUlasildi ? '#10B981' : '#A3A3A3' }} 
         />
       </FlexWidget>
     </FlexWidget>
   );
 }
-

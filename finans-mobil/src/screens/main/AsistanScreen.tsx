@@ -21,7 +21,7 @@ import { apiClient as api } from '../../api/client';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-export const AsistanScreen = ({ navigation }: any) => {
+export const AsistanScreen = ({ navigation, route }: any) => {
   const [mode, setMode] = useState<'idle' | 'listening' | 'processing' | 'speaking' | 'result'>('idle');
   const [transcript, setTranscript] = useState('');
   const [response, setResponse] = useState<any>(null);
@@ -400,6 +400,15 @@ export const AsistanScreen = ({ navigation }: any) => {
     setPending(null);
     stopAllAnims();
   };
+
+  useEffect(() => {
+    if (route?.params?.voice === 'true' || route?.params?.voice === true) {
+      setTimeout(() => {
+        startListening();
+      }, 600);
+      navigation.setParams({ voice: undefined });
+    }
+  }, [route?.params?.voice]);
 
   useEffect(() => {
     return () => {

@@ -2,6 +2,7 @@
   "expo": {
     "name": "finans-mobil",
     "slug": "finans-mobil",
+    "scheme": "finans",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
