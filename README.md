@@ -180,6 +180,10 @@ Değerlendirme kolaylığı açısından:
 
 ### 1. Veritabanı ve Express Core Backend (finans-app) Çalıştırılması
 
+Projeyi hızlıca çalıştırmak için **varsayılan olarak bulut veritabanı aktif edilmiştir**. Değerlendirici hocaların yerel bilgisayarlarına herhangi bir veritabanı kurması veya çalıştırması gerekmez.
+
+#### Seçenek A: Hazır Bulut Veritabanı ile Başlatma (Hızlı Kurulum)
+
 1.  Uygulamanın ana backend dizinine geçin:
     ```bash
     cd finans-app
@@ -188,20 +192,30 @@ Değerlendirme kolaylığı açısından:
     ```bash
     npm install
     ```
-3.  Docker konteyneri üzerinden PostgreSQL veritabanını başlatın:
+3.  Prisma istemcisini oluşturun:
+    ```bash
+    npx prisma generate
+    ```
+4.  Backend sunucusunu doğrudan başlatın (Hazır veriler bulut veritabanında mevcuttur):
+    ```bash
+    npm run dev
+    ```
+
+#### Seçenek B: Yerel (Local) Veritabanı ile Başlatma (Geliştirici Modu)
+
+Eğer projeyi kendi bilgisayarınızda sıfır veritabanı ile çalıştırmak isterseniz:
+1.  `finans-app/.env` dosyasındaki `DATABASE_URL` satırını yerel bağlantınızla güncelleyin (veya Docker için default bırakın).
+2.  Docker konteyneri üzerinden PostgreSQL veritabanını başlatın:
     ```bash
     docker-compose up -d
     ```
-4.  Veritabanı tablolarını senkronize edin (Prisma şemasını veritabanına uygulayın):
+3.  Tabloları oluşturun ve başlangıç verilerini sisteme tohumlayın (Seeding):
     ```bash
     npx prisma generate
     npm run db:push
-    ```
-5.  Gerekli başlangıç verilerini sisteme tohumlayın (Seeding):
-    ```bash
     npm run db:seed
     ```
-6.  Backend sunucusunu başlatın:
+4.  Backend sunucusunu başlatın:
     ```bash
     npm run dev
     ```
