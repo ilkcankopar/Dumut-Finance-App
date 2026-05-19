@@ -1,0 +1,37 @@
+# Node dependencies
+node_modules/
+
+# Build and distribution
+dist/
+build/
+bin/
+obj/
+out/
+.expo/
+web-build/
+
+# Virtual Environments (Python)
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+
+# Local environment and secret files
+.env
+.env.local
+.env.*.local
+*.log
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS metadata files
+.DS_Store
+Thumbs.db

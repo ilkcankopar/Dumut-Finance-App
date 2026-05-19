@@ -1,0 +1,514 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+
+enum KullaniciTipi{
+  OGRENCI
+  GIRISIMCI
+  BUSINESS
+}
+
+enum Periyot{
+  HAFTALIK
+  AYLIK
+  YILLIK
+}
+
+enum KategoriTipi{
+  GIDER
+  GELIR
+  HER_IKISI
+}
+
+enum IslemTipi{
+  GIDER
+  GELIR
+}
+
+enum HedefDurumu{
+  DEVAM_EDIYOR
+  TAMAMLANDI
+}
+
+enum RaporPeriyotu{
+  HAFTALIK
+  AYLIK
+  YILLIK
+}
+
+
+enum WidgetTipi{
+  BUTCE_OZETI
+  HEDEF_BARI
+  SERI_TAKIP
+  KATEGORI_DAGILIMI
+  GELIR_GIDER_KARSILASTIRMA
+  AYLIK_TREND
+  TASARRUF_OZETI
+  HARCAMA_TAHMINI
+}
+
+enum GirisYontemi {
+  EMAIL
+  GOOGLE
+}
+
+
+model Kategori{
+  id String @id @default(uuid())
+  ad String
+  tip KategoriTipi
+  renk String
+  ikon String
+  sistemKategorisi Boolean @default(false)
+  kullaniciId String?
+  aktif Boolean @default(true)
+  aylikHedef Float? @default(0)
+  olusturuldu DateTime @default(now())
+  kullanici Kullanici? @relation(fields: [kullaniciId], references: [id])
+  islemler Islem[]
+  butceKalemleri ButceKalemi[]
+
+  @@unique([ad,kullaniciId])
+}
+
+
+model Kullanici{
+  id String @id @default(uuid())
+  email String @unique
+  sifreHash String?
+  googleId String? @unique
+  girisYontemi GirisYontemi @default(EMAIL)
+  ad String
+  soyad String
+  kullaniciTipi KullaniciTipi
+  dilKodu String @default("tr")
+  profilResmi String?
+  sesliAsistanAktif Boolean @default(true)
+  
+  level Int @default(1)
+  xp Int @default(0)
+  toplamXP Int @default(0)
+  unvan String @default("Çaylak")
+  lig String @default("Bronz")
+  
+  olusturuldu DateTime @default(now())
+  guncellendi DateTime @updatedAt
+
+  gonderenArkadaslik Arkadaslik[] @relation("gonderen")
+  alinanArkadaslik Arkadaslik[] @relation("alinan")
+  islemler Islem[]
+  hedefler Hedef[]
+  butceProfili ButceProfili?
+  butceKalemleri ButceKalemi[]
+  widgetler Widget[]
+  seriler Seri[]
+  bildirimler Bildirim[]
+  kategoriler Kategori[]
+  raporlar Rapor[]
+  aiOneriler AiOneri[]
+  rozetler KullaniciRozet[]
+  grupHedefUyelikleri GrupHedefUye[]
+
+  hisseTakipler   HisseTakip[]
+  kriptoTakipler  KriptoTakip[]
+  gonderilenMesajlar Mesaj[] @relation("GonderilenMesajlar")
+  alinanMesajlar Mesaj[] @relation("AlinanMesajlar")
+}
+
+
+model Islem{
+  id String @id @default(uuid())
+  kullaniciId String
+  kategoriId String
+  tip IslemTipi
+  baslik String
+  miktar Float
+  periyot Periyot @default(AYLIK)
+  sabitMi Boolean @default(false)
+  odemeGunu Int? // Ayın hangi günü ödeneceği (1-31)
+  odendi Boolean @default(false) // Bu ay ödendi mi?
+  sonOdemeTarihi DateTime? // Son ödeme tarihi
+  tarih DateTime @default(now())
+  notlar String?
+  sesleEklendi Boolean @default(false)
+  etiketler String[]
+  fisUrl String?
+  ocrText String?
+  enlem Float?
+  boylam Float?
+  konumAd String?
+  olusturuldu DateTime @default(now())
+  guncellendi DateTime @updatedAt
+  kullanici Kullanici @relation(fields : [kullaniciId],references : [id])
+  kategori Kategori @relation(fields : [kategoriId],references : [id])
+}
+
+model ButceProfili{
+  id String @id @default(uuid())
+  kullaniciId String @unique
+  aylikHedefHarcama Float
+  aylikToplamGelir Float
+  kurulumTamamlandi Boolean @default(false)
+  paraBirimi String @default("TRY")
+  olusturuldu DateTime @default(now())
+  guncellendi DateTime @updatedAt
+  kullanici Kullanici @relation(fields : [kullaniciId],references :[id])
+  butceKalemleri ButceKalemi[]
+}
+
+model ButceKalemi{
+  id String @id @default(uuid())
+  kullaniciId String
+  butceProfilId String
+  kategoriId String
+  limitMiktar Float 
+  uyariYuzdesi Int @default(80)
+  olusturuldu DateTime @default(now())
+  guncellendi DateTime @updatedAt
+  kullanici Kullanici @relation(fields : [kullaniciId],references:[id])
+  butceProfili ButceProfili @relation(fields : [butceProfilId],references: [id])
+  kategori Kategori @relation(fields : [kategoriId],references : [id])
+
+  @@unique([butceProfilId, kategoriId])
+}
+
+model Hedef {
+  id String @id @default(uuid())
+  kullaniciId String
+  baslik String
+  aciklama String?
+  hedefMiktar Float
+  mevcutMiktar Float @default(0)
+  durum HedefDurumu @default(DEVAM_EDIYOR)
+  oncelik Int @default(1)
+  herkesGorsun Boolean @default(false)
+  renk String @default("#4CAF50")
+  ikon String?
+  hedefTarihi DateTime?
+  varlikSembol String?
+  varlikAdet Float?
+  varlikTip String?
+  olusturuldu DateTime @default(now())
+  guncellendi DateTime @updatedAt
+  kullanici Kullanici @relation(fields : [kullaniciId], references : [id])
+  hedefGecmisi HedefGecmisi[]
+}
+
+model HedefGecmisi{
+  id String @id @default(uuid())
+  hedefId String
+  miktar Float 
+  notlar String?
+  tarih DateTime @default(now())
+  hedef Hedef @relation(fields : [hedefId],references :[id])
+}
+
+model Rapor{
+  id String @id @default(uuid())
+  kullaniciId String
+  periyot RaporPeriyotu
+  baslangicTarihi DateTime
+  bitisTarihi DateTime
+
+  toplamGelir Float
+  toplamGider Float
+  netTasarruf Float
+  hedefHarcama Float
+  hedefFarki Float
+
+  kategoriDagilimi Json
+  haftalikTrend Json
+
+  aiOzeti String?
+
+  olusturuldu DateTime @default(now())
+
+  kullanici Kullanici @relation(fields : [kullaniciId],references :[id])
+}
+
+
+model AiOneri{
+  id String @id @default(uuid())
+  kullaniciId String
+  tip String
+  baslik String
+  icerik String
+  veriOzeti Json
+  okundu Boolean @default(false)
+  faydali Boolean?
+  olusturuldu DateTime @default(now())
+  kullanici Kullanici @relation(fields : [kullaniciId], references : [id])
+}
+
+
+model Seri{
+  id String @id @default(uuid())
+  kullaniciId String
+  tip String
+  mevcutSeri Int @default(0)
+  enUzunSeri Int @default(0)
+  toplamBasariliGun Int @default(0)
+  sonKontrolTarihi DateTime?
+  olusturuldu DateTime @default(now())
+  guncellendi DateTime @updatedAt
+  kullanici Kullanici @relation(fields : [kullaniciId],references :[id])
+  seriGecmisi SeriGecmisi[]
+}
+
+
+model SeriGecmisi{
+  id String @id @default(uuid())
+  seriId String
+  tarih DateTime
+  basarili Boolean
+  seri Seri @relation(fields : [seriId],references :[id])
+}
+
+
+model Arkadaslik {
+  id            String   @id @default(uuid())
+  gonderenId    String
+  alinanId      String
+  kabul         Boolean  @default(false)
+  hedefGoster   Boolean  @default(false)
+  raporGoster   Boolean  @default(false) 
+  olusturuldu   DateTime @default(now())
+
+  gonderen      Kullanici @relation("gonderen", fields: [gonderenId], references: [id])
+  alinan        Kullanici @relation("alinan", fields: [alinanId], references: [id])
+
+  @@unique([gonderenId, alinanId])
+}
+
+
+model Bildirim {
+  id          String   @id @default(uuid())
+  kullaniciId String
+  baslik      String
+  mesaj       String
+  okundu      Boolean  @default(false)
+  tip         String   
+  yonlendirme String?  
+  olusturuldu DateTime @default(now())
+
+  kullanici   Kullanici @relation(fields: [kullaniciId], references: [id])
+}
+
+
+model Dil {
+  id      String  @id @default(uuid())
+  kod     String  @unique
+  ad      String
+  aktif   Boolean @default(true)
+}
+
+model Ceviri {
+  id      String @id @default(uuid())
+  dilKodu String
+  anahtar String
+  deger   String
+
+  @@unique([dilKodu, anahtar])
+}
+
+model Widget {
+  id          String   @id @default(uuid())
+  kullaniciId String
+  tip         WidgetTipi
+  sira        Int      @default(0)
+  aktif       Boolean  @default(true)
+  ayarlar     Json?
+  olusturuldu DateTime @default(now())
+  guncellendi DateTime @updatedAt
+  kullanici   Kullanici @relation(fields: [kullaniciId], references: [id])
+}
+
+model Rozet {
+  id          String   @id @default(uuid())
+  ad          String   @unique
+  aciklama    String
+  ikon        String
+  renk        String   @default("#FFD700")
+  kosul       Json
+  olusturuldu DateTime @default(now())
+  kullanicilar KullaniciRozet[]
+}
+
+model KullaniciRozet {
+  id          String   @id @default(uuid())
+  kullaniciId String
+  rozetId     String
+  kazanildi   DateTime @default(now())
+  
+  kullanici   Kullanici @relation(fields: [kullaniciId], references: [id])
+  rozet       Rozet @relation(fields: [rozetId], references: [id])
+  
+  @@unique([kullaniciId, rozetId])
+}
+
+model GrupHedef {
+  id           String   @id @default(uuid())
+  ad           String
+  aciklama     String?
+  hedefMiktar  Float
+  mevcutMiktar Float    @default(0)
+  bitisTarihi  DateTime?
+  renk         String   @default("#4CAF50")
+  ikon         String?
+  olusturanId  String
+  olusturuldu  DateTime @default(now())
+  guncellendi  DateTime @updatedAt
+  
+  uyeler       GrupHedefUye[]
+}
+
+model GrupHedefUye {
+  id           String   @id @default(uuid())
+  grupHedefId  String
+  kullaniciId  String
+  katki        Float    @default(0)
+  katildi      DateTime @default(now())
+  
+  grupHedef    GrupHedef @relation(fields: [grupHedefId], references: [id], onDelete: Cascade)
+  kullanici    Kullanici @relation(fields: [kullaniciId], references: [id])
+  
+  @@unique([grupHedefId, kullaniciId])
+}
+
+
+model Hisse{
+  id String @id @default(uuid())
+  sembol String @unique
+  ad String
+  borsaKodu String
+  ulke String @default("TR")
+  paraBirimi String @default("TRY")
+  sektorKodu String?
+  aktif Boolean @default(true)
+  olusturuldu DateTime @default(now())
+
+  fiyatlar HisseFiyat[]
+  takipler HisseTakip[]
+
+}
+
+
+model HisseFiyat{
+id String @id @default(uuid())
+hisseId String
+alisFiyati Float
+satisFiyati Float
+kapanis Float
+acilis Float
+enDusuk Float
+hacim Float?
+degisimYuzde Float
+tarih DateTime @default(now())
+hisse Hisse @relation(fields : [hisseId] , references : [id])
+@@index([tarih])
+}
+
+
+model Kripto{
+  id String @id @default(uuid())
+  sembol String @unique
+  ad String
+  geckoId String @unique
+  aktif Boolean @default(true)
+  olusturuldu DateTime @default(now())
+
+  fiyatlar KriptoFiyat[]
+  takipler KriptoTakip[]
+}
+
+
+model KriptoFiyat{
+id String @id @default(uuid())
+kriptoId String
+usdFiyat Float
+tryFiyat Float
+degisim24s Float
+degisim7g Float
+piyasaDegeri Float?
+hacim24s Float?
+tarih DateTime @default(now())
+kripto Kripto @relation(fields : [kriptoId] , references : [id])
+@@index([tarih])
+}
+
+
+
+model DovizKuru{
+  id String @id @default(uuid())
+  bazKur String
+  hedefKur String
+  satisKuru Float 
+  aliskuru Float
+  tarih DateTime @default(now())
+
+  @@index([bazKur , hedefKur,tarih])
+} 
+
+
+model HisseTakip{
+  id String @id @default(uuid())
+  kullaniciId String
+  hisseId String
+  hedefFiyat Float?
+  olusturuldu DateTime @default(now())
+  kullanici Kullanici @relation(fields : [kullaniciId] , references : [id])
+  hisse Hisse @relation(fields : [hisseId], references : [id])
+
+  @@unique([kullaniciId, hisseId])
+
+}
+
+
+model KriptoTakip{
+  id String @id @default(uuid())
+  kullaniciId String 
+  kriptoId String
+  hedefFiyat Float?
+  olusturuldu DateTime @default(now())
+  kullanici Kullanici @relation(fields : [kullaniciId] , references : [id])
+  kripto Kripto @relation(fields : [kriptoId] , references : [id])
+  @@unique([kullaniciId , kriptoId])
+}
+
+model Mesaj {
+  id String @id @default(uuid())
+  gonderenId String
+  aliciId String
+  icerik String
+  mesajTipi MesajTipi @default(METIN)
+  paylasimTipi PaylasimTipi?
+  paylasimVerisi Json?
+  okunduMu Boolean @default(false)
+  olusturuldu DateTime @default(now())
+  
+  gonderen Kullanici @relation("GonderilenMesajlar", fields: [gonderenId], references: [id])
+  alici Kullanici @relation("AlinanMesajlar", fields: [aliciId], references: [id])
+  
+  @@index([gonderenId])
+  @@index([aliciId])
+}
+
+enum MesajTipi {
+  METIN
+  PAYLASIM
+}
+
+enum PaylasimTipi {
+  HEDEF
+  BUTCE
+  ISLEM
+  ROZET
+}

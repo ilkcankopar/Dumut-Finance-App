@@ -1,0 +1,93 @@
+{
+  "expo": {
+    "name": "finans-mobil",
+    "slug": "finans-mobil",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSSpeechRecognitionUsageDescription": "Allow $(PRODUCT_NAME) to use speech recognition.",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to use the microphone."
+      },
+      "bundleIdentifier": "com.ilkcankopar.finans-mobil"
+    },
+    "android": {
+      "package": "com.ilkcankopar.finansmobil",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "output": "single",
+      "name": "Finans Asistan",
+      "shortName": "Finans",
+      "description": "Sesli asistan ile finansal yönetim",
+      "lang": "tr",
+      "themeColor": "#1a1a1a",
+      "backgroundColor": "#ffffff",
+      "display": "standalone",
+      "orientation": "portrait",
+      "scope": "/",
+      "startUrl": "/"
+    },
+    "plugins": [
+      "expo-asset",
+      "expo-font",
+      "expo-web-browser",
+      [
+        "react-native-android-widget",
+        {
+          "widgets": [
+            {
+              "name": "GunlukHarcama",
+              "label": "Gunluk Harcama",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "description": "Gunluk harcama takibi",
+              "previewImage": "./assets/icon.png"
+            },
+            {
+              "name": "SesliAsistan",
+              "label": "Sesli Asistan",
+              "minWidth": "110dp",
+              "minHeight": "110dp",
+              "description": "Sesli asistani baslat",
+              "previewImage": "./assets/icon.png"
+            },
+            {
+              "name": "HedefTakip",
+              "label": "Hedef Takip",
+              "minWidth": "180dp",
+              "minHeight": "110dp",
+              "description": "Hedef takibi",
+              "previewImage": "./assets/icon.png"
+            }
+          ]
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "be7ec1e5-b43e-45af-8556-f1969007704e"
+      }
+    },
+    "owner": "ilkcankopar"
+  }
+}

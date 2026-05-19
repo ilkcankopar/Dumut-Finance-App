@@ -1,0 +1,42 @@
+{
+  "name": "Finans Asistan",
+  "short_name": "Finans",
+  "description": "Sesli asistan ile finansal yönetim - Harcamalarını sesle kaydet",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#1a1a1a",
+  "lang": "tr",
+  "categories": ["finance", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Sesli Asistan",
+      "short_name": "Asistan",
+      "description": "Sesli komut ver",
+      "url": "/asistan",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "İşlem Ekle",
+      "short_name": "Ekle",
+      "description": "Yeni işlem ekle",
+      "url": "/islem-ekle",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
