@@ -170,85 +170,49 @@ Dumut-Finance-App/
 
 ---
 
-## Kurulum ve Yerel Çalıştırma Talimatlari
+## Kurulum ve Yerel Çalıştırma Talimatları
 
-### 1. Veritabanı ve Express Core Backend (finans-app)
+Projenin tüm ana iş mantığı, veri modelleri, API yönlendirmeleri, piyasa entegrasyonları ve iş hesaplamaları JavaScript (TypeScript / Node.js Express) tabanlı olarak `finans-app` klasörü altında geliştirilmiştir.
 
-1.  Dizine geçin:
+Değerlendirme kolaylığı açısından:
+*   Projede yer alan `.env` yapılandırma dosyaları hazır ve eksiksiz olarak klasörlerin içerisinde bırakılmıştır. Değerlendirici hocaların yeni bir `.env` dosyası oluşturmasına veya yapılandırmasına gerek yoktur; sistem doğrudan mevcut çevresel değişkenleri otomatik olarak kullanacaktır.
+*   Python yapay zeka mikroservisinin (`enes-sesli-asistan`) yerel makinede kurulmasına veya çalıştırılmasına gerek yoktur. Node.js Express backend uygulaması, yapay zeka komutlarını ve ses sentezleme işlemlerini otomatik olarak koordine edecek şekilde yapılandırılmıştır.
+
+### 1. Veritabanı ve Express Core Backend (finans-app) Çalıştırılması
+
+1.  Uygulamanın ana backend dizinine geçin:
     ```bash
     cd finans-app
     ```
-2.  Bağımlılıkları kurun:
+2.  Gerekli paket bağımlılıklarını yükleyin:
     ```bash
     npm install
     ```
-3.  `.env` dosyasını oluşturun ve doldurun:
-    ```env
-    PORT=3000
-    DATABASE_URL="postgresql://username:password@localhost:5432/finans_db?schema=public"
-    NODE_ENV=development
-    JWT_ACCESS_SECRET=kendi-access-keyiniz
-    JWT_REFRESH_SECRET=kendi-refresh-keyiniz
-    JWT_ACCESS_EXPIRES_IN=15m
-    JWT_REFRESH_EXPIRES_IN=7d
-    FRONTEND_URL=http://localhost:3001
-    GEMINI_API_KEY=gemini-key
-    COLLECT_API_KEY=collectapi-key
-    AI_MICROSERVICE_URL=http://localhost:8000
-    ```
-4.  Veritabanı tablolarını senkronize edin:
+3.  Veritabanı tablolarını senkronize edin (Mevcut yapılandırma SQLite/PostgreSQL için hazırdır):
     ```bash
     npx prisma generate
     npm run db:push
     ```
-5.  Başlangıç verilerini yükleyin (Seeding):
+4.  Gerekli başlangıç verilerini sisteme tohumlayın (Seeding):
     ```bash
     npm run db:seed
     ```
-6.  Backend sunucusunu başlatın:
+5.  Backend sunucusunu başlatın:
     ```bash
     npm run dev
     ```
 
-### 2. Python Yapay Zeka Mikroservisi (enes-sesli-asistan)
+### 2. Expo Mobil Uygulama Client (finans-mobil) Çalıştırılması
 
-1.  Dizine geçin:
-    ```bash
-    cd enes-sesli-asistan
-    ```
-2.  Sanal ortam oluşturun ve aktif edin:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # macOS/Linux
-    # venv\Scripts\activate   # Windows
-    ```
-3.  Kütüphaneleri yükleyin:
-    ```bash
-    pip install -r requirements.txt
-    ```
-4.  `.env` dosyasını yapılandırın:
-    ```env
-    GOOGLE_API_KEY=gemini-key
-    GROQ_API_KEY=groq-key
-    PORT=8000
-    ```
-5.  Uygulamayı başlatın:
-    ```bash
-    uvicorn ai.main:app --host 0.0.0.0 --port 8000 --reload
-    ```
-
-### 3. Expo Mobil Uygulama Client (finans-mobil)
-
-1.  Dizine geçin:
+1.  Uygulamanın mobil dizinine geçin:
     ```bash
     cd finans-mobil
     ```
-2.  Bağımlılıkları yükleyin:
+2.  Mobil bağımlılıkları yükleyin:
     ```bash
     npm install
     ```
-3.  `src/config.ts` dosyasından `apiUrl` değerini Express API adresinize yönlendirin.
-4.  Expo sunucusunu başlatın:
+3.  Expo paketleyicisini ve geliştirici sunucusunu başlatın:
     ```bash
     npx expo start
     ```
