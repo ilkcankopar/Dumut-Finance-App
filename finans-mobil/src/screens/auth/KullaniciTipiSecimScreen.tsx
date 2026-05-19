@@ -37,8 +37,8 @@ const kullaniciTipleri: KullaniciTipiOption[] = [
   },
   {
     value: 'BUSINESS',
-    baslik: 'İşletme Sahibi',
-    aciklama: 'Kişisel ve kurumsal sermayeyi ayırma, operasyonel gider analizi ve dar marj yönetimi.',
+    baslik: 'Çalışan',
+    aciklama: 'Maaş yönetimi, düzenli gelir akışı, aylık birikim ve kişisel harcama takibi.',
     icon: 'briefcase',
   },
 ];

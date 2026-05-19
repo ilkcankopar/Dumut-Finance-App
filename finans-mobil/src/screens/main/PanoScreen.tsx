@@ -418,7 +418,7 @@ export const PanoScreen: React.FC<Props> = ({ navigation }) => {
                     ]}>
                       {user.kullaniciTipi === 'OGRENCI' ? 'Öğrenci Hesabı' : 
                        user.kullaniciTipi === 'GIRISIMCI' ? 'Girişimci Hesabı' : 
-                       user.kullaniciTipi === 'BUSINESS' ? 'İşletme Hesabı' : 'Bireysel'}
+                       user.kullaniciTipi === 'BUSINESS' ? 'Çalışan Hesabı' : 'Bireysel'}
                     </Text>
                   </View>
                 )}

@@ -123,7 +123,7 @@ export const ProfilScreen: React.FC<Props> = ({ navigation }) => {
       case 'GIRISIMCI':
         return 'Girişimci';
       case 'BUSINESS':
-        return 'İşletme Hesabı';
+        return 'Çalışan Hesabı';
       default:
         return 'Kullanıcı';
     }
