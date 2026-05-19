@@ -1,69 +1,62 @@
-# Dumut: Oyunlastirilmis Sosyal Finans ve Yapay Zeka Destekli Butce Yonetimi Ekosistemi
+# Dumut: Oyunlaştırılmış Sosyal Finans ve Yapay Zeka Destekli Bütçe Yönetimi Ekosistemi
 
-BTK Hackathon 2026 Proje Basvurusu
+BTK Hackathon 2026 Proje Başvurusu
 
 ---
 
-## Icindekiler
-- [Proje Ozeti ve Deger Onerisi](#proje-ozeti-ve-deger-onerisi)
-- [Uygulamanin Genel Isleyis Mantigi](#uygulamanin-genel-isleyis-mantigi)
-- [Mimari ve Veritabani Yapisi](#mimari-ve-veritabani-yapisi)
-- [Entegrasyonlar ve Onbellekleme (Cache) Stratejileri](#entegrasyonlar-ve-onbellekleme-cache-stratejileri)
-  - [1. CollectAPI ve Canli Piyasa Entegrasyonu](#1-collectapi-ve-canli-piyasa-entegrasyonu)
+## İçindekiler
+- [Proje Özeti ve Değer Önerisi](#proje-özeti-ve-değer-önerisi)
+- [Uygulamanın Genel İşleyiş Mantığı](#uygulamanın-genel-işleyiş-mantığı)
+- [Mimari ve Veritabanı Yapısı](#mimari-ve-veritabanı-yapısı)
+- [Entegrasyonlar ve Önbellekleme (Cache) Stratejileri](#entegrasyonlar-ve-önbellekleme-cache-stratejileri)
+  - [1. CollectAPI ve Canlı Piyasa Entegrasyonu](#1-collectapi-ve-canlı-piyasa-entegrasyonu)
   - [2. ElevenLabs ve Google TTS Entegrasyonu](#2-elevenlabs-ve-google-tts-entegrasyonu)
   - [3. Sesli Asistan Entegrasyonu ve Performans Optimizasyonu (sesli-asistan.service.ts)](#3-sesli-asistan-entegrasyonu-ve-performans-optimizasyonu-sesli-asistanservicets)
-- [Ortak Yardimci Moduller (Utils)](#ortak-yardimci-moduller-utils)
-- [Temel Urun Ozellikleri](#temel-urun-ozellikleri)
-- [Proje Klasor Yapisi](#proje-klasor-yapisi)
-- [Kurulum ve Yerel Calistirma Talimatlari](#kurulum-ve-yerel-calistirma-talimatlari)
-  - [1. Veritabani ve Express Core Backend (finans-app)](#1-veritabani-ve-express-core-backend-finans-app)
+- [Gelecek Planları ve Pasif Modüller (Oyunlaştırma & Sanal Pet)](#gelecek-planları-ve-pasif-modüller-oyunlaştırma--sanal-pet)
+- [Ortak Yardımcı Modüller (Utils)](#ortak-yardımcı-modüller-utils)
+- [Temel Ürün Özellikleri](#temel-ürün-özellikleri)
+- [Proje Klasör Yapısı](#proje-klasör-yapısı)
+- [Kurulum ve Yerel Çalıştırma Talimatları](#kurulum-ve-yerel-çalıştırma-talimatları)
+  - [1. Veritabanı ve Express Core Backend (finans-app)](#1-veritabanı-ve-express-core-backend-finans-app)
   - [2. Python Yapay Zeka Mikroservisi (enes-sesli-asistan)](#2-python-yapay-zeka-mikroservisi-enes-sesli-asistan)
-  - [3. Expo Mobil Uylugama Client (finans-mobil)](#3-expo-mobil-uylugama-client-finans-mobil)
-- [API Yonlendirme Linkleri](#api-yonlendirme-linkleri)
-- [Hackathon Degerlendirme Uyum Tablosu](#hackathon-degerlendirme-uyum-tablosu)
+  - [3. Expo Mobil Uygulama Client (finans-mobil)](#3-expo-mobil-uygulama-client-finans-mobil)
+- [API Yönlendirme Linkleri](#api-yönlendirme-linkleri)
+- [Hackathon Değerlendirme Uyum Tablosu](#hackathon-değerlendirme-uyum-tablosu)
 
 ---
 
-## Proje Ozeti ve Deger Onerisi
+## Proje Özeti ve Değer Önerisi
 
-Geleneksel finans uygulamalari kullaniciyi surekli olarak manuel veri girisi yapmaya zorlamakta ve finansal durumlari karmasik grafiklerle sunarak motivasyonu dusurmektedir. Dumut, finansal yonetimi oyunlastirma mekanikleri ve sesli yapay zeka entegrasyonu ile bir eglence unsuruna donusturur.
+Geleneksel finans uygulamaları kullanıcıyı sürekli olarak manuel veri girişi yapmaya zorlamakta ve finansal durumları karmaşık grafiklerle sunarak motivasyonu düşürmektedir. Dumut, finansal yönetimi oyunlaştırma mekanikleri ve sesli yapay zeka entegrasyonu ile bir eğlence unsuruna dönüştürmeyi hedefler.
 
-Uygulamanin odaginda kullanicinin finansal aliskanliklarina gore gelisen, beslenen ve tepkiler veren sanal evcil hayvan Dumut bulunur. Kullanicilar harcamalarini girdikce, aylik bütce limitlerine sadik kaldikca veya birikim hedeflerine katkida bulundukca deneyim puani (XP) kazanirlar. Bu puanlar sayesinde seviye atlayan kullanicilar Bronz Ligden baslayarak Sampiyon Ligine kadar yukselebilirler.
-
-Yapay zeka katmaninda ise, kullanicilarin sesli komutlarini (ornegin "Bugun yemek kategorisinde 350 lira gider ekle" veya "Araba hedefime 2000 lira aktar") milisaniyeler icinde yaziya doken ve Gemini Flash uzerinden analiz ederek otomatik olarak bütceye isleyen gelismis bir dogal dil isleme (NLP) asistani calisir.
+Yapay zeka katmanında, kullanıcıların sesli komutlarını (örneğin "Bugün yemek kategorisinde 350 lira gider ekle" veya "Araba hedefime 2000 lira aktar") milisaniyeler içinde yazıya döken ve Gemini Flash üzerinden analiz ederek otomatik olarak bütçeye işleyen gelişmiş bir doğal dil işleme (NLP) asistanı çalışır.
 
 ---
 
-## Uygulamanin Genel Isleyis Mantigi
+## Uygulamanın Genel İşleyiş Mantığı
 
-Dumut uygulamasi, kullanicinin onboarding surecinden baslayarak gunluk harcama girisleri, oyunlastirma donguleri ve sosyal etkilesimleri asagidaki is adimlari ile yonetir:
+Dumut uygulaması, kullanıcının onboarding sürecinden başlayarak günlük harcama girişleri, yapay zeka analizleri ve sosyal etkileşimleri aşağıdaki iş adımları ile yönetir:
 
-### 1. Onboarding ve Rol Secimi
-Kullanici sisteme kayit olurken mesleki ve finansal profilini yansitan bir kullanici tipi secer (Ogrenci, Girisimci, Is Insani vb.). Secilen profile gore yapay zeka arka planda hazir harcama kategorileri ve bütce limitleri onerir. Kullanici aylik toplam gelir ve harcama hedeflerini belirleyerek ilk kurulumu tamamlar.
+### 1. Onboarding ve Rol Seçimi
+Kullanıcı sisteme kayıt olurken mesleki ve finansal profilini yansıtacak bir kullanıcı tipi seçer (Öğrenci, Girişimci, İş İnsanı vb.). Seçilen profile göre yapay zeka arka planda hazır harcama kategorileri ve bütçe limitleri önerir. Kullanıcı aylık toplam gelir ve harcama hedeflerini belirleyerek ilk kurulumu tamamlar.
 
-### 2. Islem Girisi ve Sesli Asistan Dongusu
-Kullanicilar iki sekilde harcama veya gelir ekleyebilir:
-*   **Manuel Giris:** Arayuz uzerinden kategori secilerek tutar ve baslik girilir. Haritanin kullanilabilmesi icin konum bilgisi de isleme ilistirebilir.
-*   **Sesli Komut Girisi:** Mobil cihaz uzerinden ses kaydi baslatilir. Kaydedilen ses verisi ham base64 formatinda backend uzerinden Python mikroservisine iletilir.
-    *   **Whisper STT** ile ses yaziya dokulur.
-    *   **Gemini Flash** modeli kullanilarak metinden niyet (intent), miktar, baslik ve uygun kategori cikarilir.
-    *   Sistem, kullaniciya "120 TL Yemek harcamasi giriyorum, onayliyor musunuz?" seklinde sesli (ElevenLabs veya Google TTS) ve yazili geri bildirim doner.
-    *   Kullanici onayladigi anda islem veritabanina yazilir.
+### 2. İşlem Girişi ve Sesli Asistan Döngüsü
+Kullanıcılar iki şekilde harcama veya gelir ekleyebilir:
+*   **Manuel Giriş:** Arayüz üzerinden kategori seçilerek tutar ve başlık girilir. Haritanın kullanılabilmesi için konum bilgisi de işleme iliştirilebilir.
+*   **Sesli Komut Girişi:** Mobil cihaz üzerinden ses kaydı başlatılır. Kaydedilen ses verisi ham base64 formatında backend üzerinden Python mikroservisine iletilir.
+    *   **Whisper STT** ile ses yazıya dökülür.
+    *   **Gemini Flash** modeli kullanılarak metinden niyet (intent), miktar, başlık ve uygun kategori çıkarılır.
+    *   Sistem, kullanıcıya "120 TL Yemek harcaması giriyorum, onaylıyor musunuz?" şeklinde sesli (ElevenLabs veya Google TTS) ve yazılı geri bildirim döner.
+    *   Kullanıcı onayladığı anda işlem veritabanına yazılır.
 
-### 3. Oyunlastirma ve Seviye Kontrolu
-Her basarili harcama girisi, bütce hedefine sadik kalinmasi veya arkadas davet edilmesi kullaniciya XP kazandirir.
-*   **Seviye Atlama:** XP biriktikce kullanicinin seviyesi (level) artar ve yeni finansal unvanlar kazanir.
-*   **Lig Sistemi:** Haftalik olarak kullanicilar seviye siralamasina gore Bronz, Gumus, Altin, Platin, Elmas ve Sampiyon ligleri arasinda yukselir veya duser.
-*   **Seri (Streak):** Kullanicilarin uygulamayi her gun aktif olarak kullanmasi durumunda streak sayaci artar. Gunluk harcama girmeyi unutma durumuna karsi sanal marketten coin ile Seri Kalkanlari satin alinabilir.
-
-### 4. Sosyal Etkilesim ve Ortak Hedefler
-Kullanicilar uygulama icinde birbirlerini arkadas olarak ekleyebilir. Sohbet arayuzu uzerinden canli mesajlasirken, kendi birikim hedeflerini veya kazandiklari basari rozetlerini kart seklinde karsi tarafa gonderebilirler. Ortak grup hedefleri sayesinde birden fazla kullanici tek bir birikim havuzuna para ekleyebilir ve kimin ne kadar katki sagladigi canli olarak izlenebilir.
+### 3. Sosyal Etkileşim ve Ortak Hedefler
+Kullanıcılar uygulama içinde birbirlerini arkadaş olarak ekleyebilir. Sohbet arayüzü üzerinden canlı mesajlaşırken, kendi birikim hedeflerini veya kazandıkları başarı rozetlerini kart şeklinde karşı tarafa gönderebilirler. Ortak grup hedefleri sayesinde birden fazla kullanıcı tek bir birikim havuzuna para ekleyebilir ve kimin ne kadar katkı sağladığı canlı olarak izlenebilir.
 
 ---
 
-## Mimari ve Veritabani Yapisi
+## Mimari ve Veritabanı Yapısı
 
-Sistem, yuksek esneklik ve olceklenebilirlik icin asagidaki gibi katmanli bir mikroservis mimarisine sahiptir:
+Sistem, yüksek esneklik ve ölçeklenebilirlik için aşağıdaki gibi katmanlı bir mikroservis mimarisine sahiptir:
 
 ```mermaid
 graph TD
@@ -82,107 +75,114 @@ graph TD
 
 ---
 
-## Entegrasyonlar ve Onbellekleme (Cache) Stratejileri
+## Entegrasyonlar ve Önbellekleme (Cache) Stratejileri
 
-BTK Hackathon 2026 projesinde dis servislere giden isteklerin maliyetini dusurmek, kotayi korumak ve uygulama hizini maksimize etmek amaciyla gelismis onbellekleme mekanizmalari uygulanmistir.
+BTK Hackathon 2026 projesinde dış servislere giden isteklerin maliyetini düşürmek, kotayı korumak ve uygulama hızını maksimize etmek amacıyla gelişmiş önbellekleme mekanizmaları uygulanmıştır.
 
-### 1. CollectAPI ve Canli Piyasa Entegrasyonu
+### 1. CollectAPI ve Canlı Piyasa Entegrasyonu
 
-Uygulamada hisse senetleri (BIST100), kripto paralar, altin/gumus fiyatlari ve doviz kurlari gibi canli veriler **CollectAPI** uzerinden saglanmaktadir. Ancak API kota limitlerini verimli kullanmak adina canli piyasa verileri icin **PiyasaCache** adinda in-memory (bellek ici) onbellek yapisi kurgulanmistir.
+Uygulamada hisse senetleri (BIST100), kripto paralar, altın/gümüş fiyatları ve döviz kurları gibi canlı veriler **CollectAPI** üzerinden sağlanmaktadır. Ancak API kota limitlerini verimli kullanmak adına canlı piyasa verileri için **PiyasaCache** adında in-memory (bellek içi) önbellek yapısı kurgulanmıştır.
 
-*   **Calisma Mantigi:** `piyasa.cache.ts` dosyasi icerisinde in-memory JavaScript `Map` tabanli bir store barindirilir.
-*   **Gecerlilik Sureleri (TTL):**
-    *   BIST 100 Endeks ve Tum Hisseler: 5 dakika
+*   **Çalışma Mantığı:** `piyasa.cache.ts` dosyası içerisinde in-memory JavaScript `Map` tabanlı bir store barındırılır.
+*   **Geçerlilik Süreleri (TTL):**
+    *   BIST 100 Endeks ve Tüm Hisseler: 5 dakika
     *   Kripto Para Fiyat Listesi: 3 dakika
-    *   Altin ve Gumus Fiyatlari: 5 dakika
-    *   Doviz Kurlari: 10 dakika
-*   **Akis:** API katmanina gelen sorgularda oncelikle bellek kontrol edilir. Eger veri bulunuyorsa ve son guncellenme zamanindan itibaren belirtilen TTL suresi asilmadiysa veri doğrudan cache'den donulur. Sure asildiysa API'ye istek atilarak yeni veri çekilir, onbellek guncellenir ve veri kullaniciya iletilir. Bu sayede canli veri saglayici kotalarinda %90'a varan tasarruf elde edilmektedir.
+    *   Altın ve Gümüş Fiyatları: 5 dakika
+    *   Döviz Kurları: 10 dakika
+*   **Akış:** API katmanına gelen sorgularda öncelikle bellek kontrol edilir. Eğer veri bulunuyorsa ve son güncellenme zamanından itibaren belirtilen TTL süresi aşılmadıysa veri doğrudan cache'den dönülür. Süre aşıldıysa API'ye istek atılarak yeni veri çekilir, önbellek güncellenir ve veri kullanıcıya iletilir. Bu sayede canlı veri sağlayıcı kotalarında %90'a varan tasarruf elde edilmektedir.
 
 ### 2. ElevenLabs ve Google TTS Entegrasyonu
 
-Sesli asistanin kullaniciya sesli yanit donmesi amaciyla **ElevenLabs Text-to-Speech API** kullanilmaktadir. Ancak ses uretimi maliyetli ve kota bagimli oldugu icin sistemde dinamik bir hata tolerans ve fallback mekanizmasi kurulmustur.
+Sesli asistanın kullanıcıya sesli yanıt dönmesi amacıyla **ElevenLabs Text-to-Speech API** kullanılmaktadır. Ancak ses üretimi maliyetli ve kota bağımlı olduğu için sistemde dinamik bir hata tolerans ve fallback mekanizması kurulmuştur.
 
-*   **TTS Fallback Mantigi:** Kullanicinin islemi sesli olarak girildiginde asistan cevabi ElevenLabs API uzerinden seslendirilir. 
-*   Eger kota asimi, sunucu hatasi veya ag problemi nedeniyle ElevenLabs servisi yanit vermezse, sistem otomatik olarak **Google Translate TTS API**'sine istek atar. Bu sayede ses sentezleme islemi kesintiye ugramadan devam eder ve kullanici deneyimi korunur.
+*   **TTS Fallback Mantığı:** Kullanıcının işlemi sesli olarak girildiğinde asistan cevabı ElevenLabs API üzerinden seslendirilir. 
+*   Eğer kota aşımı, sunucu hatası veya ağ problemi nedeniyle ElevenLabs servisi yanıt vermezse, sistem otomatik olarak **Google Translate TTS API**'sine istek atar. Bu sayede ses sentezleme işlemi kesintiye uğramadan devam eder ve kullanıcı deneyimi korunur.
 
 ### 3. Sesli Asistan Entegrasyonu ve Performans Optimizasyonu (sesli-asistan.service.ts)
 
-Sistemdeki en kritik performans iyilestirmelerinden biri, Python tabanli **enes-sesli-asistan** yapay zeka servisi ile Express Core Gateway arasinda yapilan entegrasyondur.
+Sistemdeki en kritik performans iyileştirmelerinden biri, Python tabanlı **enes-sesli-asistan** yapay zeka servisi ile Express Core Gateway arasında yapılan entegrasyondur.
 
-*   **Entegrasyon Yapisi:** Sesli komutlarin alinmasi, transkript edilmesi, niyet analizlerinin yapilmasi ve bütce kontekstine uygun cevaplarin uretilmesi asamalari, ana backend icerisindeki `sesli-asistan.service.ts` modulu ile Python yapay zeka mikroservisi arasinda sıkı bir sekilde baglanmistir.
-*   **Performans Optimizasyonu:** Istemciden (mobil uygulamadan) gelen ses verileri, backend gateway uzerinde gecikmeye yol acmadan dogrudan asenkron veri akislari (stream) seklinde Python NLP katmanina iletilir. intent (niyet) ve context (bütce/kullanici) bilgileri, servis katmanindaki cache'lenmis veritabanı sorgulariyla birlestirilir. Bu mimari sayesinde ses kaydinin gonderilmesiyle islemin parse edilip onay ekranina dusmesi arasindaki gecikme suresi milisaniyeler seviyesine indirilerek sistem performansi maksimuma ulastirilmistir.
+*   **Entegrasyon Yapısı:** Sesli komutların alınması, transkript edilmesi, niyet analizlerinin yapılması ve bütçe kontekstine uygun cevapların üretilmesi aşamaları, ana backend içerisindeki `sesli-asistan.service.ts` modülü ile Python yapay zeka mikroservisi arasında sıkı bir şekilde bağlanmıştır.
+*   **Performans Optimizasyonu:** İstemciden (mobil uygulamadan) gelen ses verileri, backend gateway üzerinde gecikmeye yol açmadan doğrudan asenkron veri akışları (stream) şeklinde Python NLP katmanına iletilir. Intent (niyet) ve context (bütçe/kullanıcı) bilgileri, servis katmanındaki cache'lenmiş veritabanı sorgularıyla birleştirilir. Bu mimari sayesinde ses kaydının gönderilmesiyle işlemin parse edilip onay ekranına düşmesi arasındaki gecikme süresi milisaniyeler seviyesine indirilerek sistem performansı maksimuma ulaştırılmıştır.
 
 ---
 
-## Ortak Yardimci Moduller (Utils)
+## Gelecek Planları ve Pasif Modüller (Oyunlaştırma & Sanal Pet)
 
-Uygulamanin Express backend (finans-app) projesi icerisinde kod tekrarlarini onlemek, standartlari korumak ve güvenli veri donusumleri saglamak amaciyla gelistirilen yardimci moduller su sekildedir:
+Uygulamanın ilk tasarım aşamasında yer alan sanal evcil hayvan ("Kedim" alanı) ve lig bazlı oyunlaştırma sistemi, çekirdek işlevlerin kararlılığını artırmak amacıyla şu an için **pasif (inaktif)** duruma getirilmiştir. 
 
-*   **ApiError (ApiError.ts):** Sistem genelinde standart hata modellemesi saglar. Hata kodlari, operasyonel durumlar ve dogrulama hatalarinin tek bir formatta (`{ success: false, error: ... }`) donmesini garantiler.
-*   **ApiResponse (ApiResponse.ts):** Tum basarili HTTP yanitlarini standartlastiran yardimci siniftir. Tum istemcilere tutarli bir veri yapisi sunar.
-*   **asyncHandler (asyncHandler.ts):** Express rotalarindaki asenkron fonksiyonlari sarmalayarak olasi hatalari yakalar ve merkezi hata yonetim middleware'ine (next) aktarir. Bu sayede kod icinde `try-catch` kalabaligi engellenir.
+*   **Gelecek Yol Haritası:** Projenin ilerleyen aşamalarında sanal pet entegrasyonunun tekrar aktifleştirilmesi planlanmaktadır. Bu entegrasyon, uygulamanın performansını ve dosya boyutunu optimize etmek amacıyla 3D modeller yerine hafif ve hızlı yüklenen **Sprite Sheet** (2D animasyon sayfaları) kullanılarak hayata geçirilecektir. Altyapı, kullanıcı harcama disiplinine göre animasyon karelerinin dinamik tetiklenmesini destekleyecek şekilde hazır tutulmaktadır.
+
+---
+
+## Ortak Yardımcı Modüller (Utils)
+
+Uygulamanın Express backend (finans-app) projesi içerisinde kod tekrarlarını önlemek, standartları korumak ve güvenli veri dönüşümleri sağlamak amacıyla geliştirilen yardımcı modüller şu şekildedir:
+
+*   **ApiError (ApiError.ts):** Sistem genelinde standart hata modellemesi sağlar. Hata kodları, operasyonel durumlar ve doğrulama hatalarının tek bir formatta (`{ success: false, error: ... }`) dönmesini garantiler.
+*   **ApiResponse (ApiResponse.ts):** Tüm başarılı HTTP yanıtlarını standartlaştıran yardımcı sınıftır. Tüm istemcilere tutarlı bir veri yapısı sunar.
+*   **asyncHandler (asyncHandler.ts):** Express rotalarındaki asenkron fonksiyonları sarmalayarak olası hataları yakalar ve merkezi hata yönetimi middleware'ine (next) aktarır. Bu sayede kod içinde `try-catch` kalabalığı engellenir.
 *   **finansalUtil (finansal.util.ts):** Finansal hesaplama motorudur.
-    *   `ayligaCevir`: Haftalik ve yillik bütceleri aylik standarta donusturur.
-    *   `butceKullanimHesapla`: Kalan limit ve yuzdesel bütce kullanimini hesaplar.
-    *   `hedefYuzdesiHesapla`: Birikim hedeflerinin tamamlanma oranini bulur.
-    *   `kategoriDagilimiHesapla`: Harcamalar icindeki kategori agirliklarini yuzdesel olarak cikarir.
-    *   `formatla`: Tutar bilgilerini yerel Turk Lirasi standartlarina (`Intl.NumberFormat`) gore bicimlendirir.
-*   **hashUtil (hash.util.ts):** Kullanici sifrelerinin veritabani uzerinde guvenli bir sekilde saklanmasi icin `bcrypt` tabanli sifreleme ve karsilastirma islemlerini yurutur.
-*   **tokenUtil (token.util.ts):** JWT tabanli yetkilendirme islemlerini yonetir. Access ve Refresh token uretme, doğrulama ve rotasyon sureclerini guvenli sekilde koordine eder.
+    *   `ayligaCevir`: Haftalık ve yıllık bütçeleri aylık standarta dönüştürür.
+    *   `butceKullanimHesapla`: Kalan limit ve yüzdesel bütçe kullanımını hesaplar.
+    *   `hedefYuzdesiHesapla`: Birikim hedeflerinin tamamlanma oranını bulur.
+    *   `kategoriDagilimiHesapla`: Harcamalar içindeki kategori ağırlıklarını yüzdesel olarak çıkarır.
+    *   `formatla`: Tutar bilgilerini yerel Türk Lirası standartlarına (`Intl.NumberFormat`) göre biçimlendirir.
+*   **hashUtil (hash.util.ts):** Kullanıcı şifrelerinin veritabanı üzerinde güvenli bir şekilde saklanması için `bcrypt` tabanlı şifreleme ve karşılaştırma işlemlerini yürütür.
+*   **tokenUtil (token.util.ts):** JWT tabanlı yetkilendirme işlemlerini yönetir. Access ve Refresh token üretme, doğrulama ve rotasyon süreçlerini güvenli şekilde koordine eder.
 
 ---
 
-## Temel Urun Ozellikleri
+## Temel Ürün Özellikleri
 
-1.  **Dumut Sanal Pet Altyapisi:** Kullanicinin finansal durustlugu ve surekliligine gore buyuyen evcil hayvan.
-2.  **Yapay Zeka Ses Asistani:** Whisper STT ve Gemini Flash ile ses kayitlarindan finansal parametre cikarma.
-3.  **Ortak Grup Hedefleri:** Arkadas gruplariyla ortak birikim havuzlari ve katki siralamalari.
-4.  **Konum Bazli Harita Raporlari:** Harcamalarin konumlarinin kaydedilmesi ve haritada gosterimi.
-5.  **AI Destekli Fis Okuma (OCR):** Harcama fislerinin fotograflarindan veri cikarma.
-6.  **Sosyal Ag ve Paylasimli Mesajlasma:** Sohbet ekranlarinda bütce ve hedef kartlarinin dinamik olarak paylasilmasi.
+1.  **Yapay Zeka Ses Asistanı:** Whisper STT ve Gemini Flash ile ses kayıtlarından finansal parametre çıkarma.
+2.  **Ortak Grup Hedefleri:** Arkadaş gruplarıyla ortak birikim havuzları ve katkı sıralamaları.
+3.  **Konum Bazlı Harita Raporları:** Harcamaların konumlarının kaydedilmesi ve haritada gösterimi.
+4.  **AI Destekli Fiş Okuma (OCR):** Harcama fişlerinin fotoğraflarından veri çıkarma.
+5.  **Sosyal Ağ ve Paylaşımlı Mesajlaşma:** Sohbet ekranlarında bütçe ve hedef kartlarının dinamik olarak paylaşılması.
 
 ---
 
-## Proje Klasor Yapisi
+## Proje Klasör Yapısı
 
 ```text
 Dumut-Finance-App/
-├── finans-mobil/           # React Native Expo Mobil Istemci kodlari
+├── finans-mobil/           # React Native Expo Mobil İstemci kodları
 │   └── src/
-│       ├── api/            # Istek Yoneticileri ve Axios Yapilandirmasi
-│       ├── components/     # Arayuz Elemanlari
-│       ├── context/        # Oturum ve Global State Katmanlari
+│       ├── api/            # İstek Yöneticileri ve Axios Yapılandırması
+│       ├── components/     # Arayüz Elemanları
+│       ├── context/        # Oturum ve Global State Katmanları
 │       └── screens/        # Dashboard, Asistan, Sosyal, Piyasa vb. Ekranlar
 │
 ├── finans-app/             # Node.js Express & Prisma Ana Backend API Gateway
-│   ├── prisma/             # Veritabani Semasi ve Seed Betikleri
+│   ├── prisma/             # Veritabanı Şeması ve Seed Betikleri
 │   └── src/
-│       ├── config/         # Logger ve API Anahtari Yapilandirmalari
+│       ├── config/         # Logger ve API Anahtarı Yapılandırmaları
 │       ├── middleware/     # Auth, Zod Validation, Rate Limiter, Error Handler
-│       ├── utils/          # ApiError, ApiResponse, finansalUtil, tokenUtil yardimcilar
-│       └── modules/        # Bütce, Islem, Sosyal, AI Modulleri
+│       ├── utils/          # ApiError, ApiResponse, finansalUtil, tokenUtil yardımcıları
+│       └── modules/        # Bütçe, İşlem, Sosyal, AI Modülleri
 │
 └── enes-sesli-asistan/     # Python FastAPI AI & Speech Processing Mikroservisi
     └── ai/
-        ├── main.py         # FastAPI Sunucu ve Yonlendiriciler
+        ├── main.py         # FastAPI Sunucu ve Yönlendiriciler
         └── services/       # Yapay Zeka, STT (Whisper) ve TTS Servisleri
 ```
 
 ---
 
-## Kurulum ve Yerel Calistirma Talimatlari
+## Kurulum ve Yerel Çalıştırma Talimatlari
 
-### 1. Veritabani ve Express Core Backend (finans-app)
+### 1. Veritabanı ve Express Core Backend (finans-app)
 
-1.  Dizine gecin:
+1.  Dizine geçin:
     ```bash
     cd finans-app
     ```
-2.  Bagimliliklari kurun:
+2.  Bağımlılıkları kurun:
     ```bash
     npm install
     ```
-3.  `.env` dosyasini olusturun ve doldurun:
+3.  `.env` dosyasını oluşturun ve doldurun:
     ```env
     PORT=3000
     DATABASE_URL="postgresql://username:password@localhost:5432/finans_db?schema=public"
@@ -196,74 +196,74 @@ Dumut-Finance-App/
     COLLECT_API_KEY=collectapi-key
     AI_MICROSERVICE_URL=http://localhost:8000
     ```
-4.  Veritabani tablolarini senkronize edin:
+4.  Veritabanı tablolarını senkronize edin:
     ```bash
     npx prisma generate
     npm run db:push
     ```
-5.  Baslangic verilerini yukleyin (Seeding):
+5.  Başlangıç verilerini yükleyin (Seeding):
     ```bash
     npm run db:seed
     ```
-6.  Backend sunucusunu baslatin:
+6.  Backend sunucusunu başlatın:
     ```bash
     npm run dev
     ```
 
 ### 2. Python Yapay Zeka Mikroservisi (enes-sesli-asistan)
 
-1.  Dizine gecin:
+1.  Dizine geçin:
     ```bash
     cd enes-sesli-asistan
     ```
-2.  Sanal ortam olusturun ve aktif edin:
+2.  Sanal ortam oluşturun ve aktif edin:
     ```bash
     python -m venv venv
     source venv/bin/activate  # macOS/Linux
     # venv\Scripts\activate   # Windows
     ```
-3.  Kutuphaneleri yukleyin:
+3.  Kütüphaneleri yükleyin:
     ```bash
     pip install -r requirements.txt
     ```
-4.  `.env` dosyasini yapılandırın:
+4.  `.env` dosyasını yapılandırın:
     ```env
     GOOGLE_API_KEY=gemini-key
     GROQ_API_KEY=groq-key
     PORT=8000
     ```
-5.  Uygulamayi baslatin:
+5.  Uygulamayı başlatın:
     ```bash
     uvicorn ai.main:app --host 0.0.0.0 --port 8000 --reload
     ```
 
-### 3. Expo Mobil Uylugama Client (finans-mobil)
+### 3. Expo Mobil Uygulama Client (finans-mobil)
 
-1.  Dizine gecin:
+1.  Dizine geçin:
     ```bash
     cd finans-mobil
     ```
-2.  Bagimliliklari yukleyin:
+2.  Bağımlılıkları yükleyin:
     ```bash
     npm install
     ```
-3.  `src/config.ts` dosyasindan `apiUrl` degerini Express API adresinize yonlendirin.
-4.  Expo sunucusunu baslatin:
+3.  `src/config.ts` dosyasından `apiUrl` değerini Express API adresinize yönlendirin.
+4.  Expo sunucusunu başlatın:
     ```bash
     npx expo start
     ```
 
 ---
 
-## API Yonlendirme Linkleri
+## API Yönlendirme Linkleri
 
-Projedeki tum API rotalari ve parametreleri detayli sekilde dokumante edilerek ayri bir dosyada toplanmistir.
-*   **Detayli API Dokumantasyonu:** [API_DOKUMANTASYONU.md](file:///Users/macbookairm1/Desktop/finans/API_DOKUMANTASYONU.md) konumundan ulasabilirsiniz.
+Projedeki tüm API rotaları ve parametreleri detaylı şekilde dokümante edilerek ayrı bir dosyada toplanmıştır.
+*   **Detaylı API Dokümantasyonu:** [API_DOKUMANTASYONU.md](file:///Users/macbookairm1/Desktop/finans/API_DOKUMANTASYONU.md) konumundan ulaşabilirsiniz.
 
 ---
 
-## Hackathon Degerlendirme Uyum Tablosu
+## Hackathon Değerlendirme Uyum Tablosu
 
-*   **Teknolojik Yetkinlik:** Node.js, Express, Python FastAPI, PostgreSQL, Prisma ORM, Zod, JWT gibi modern ve guvenli teknolojilerin kullanimi.
-*   **Kullanici Deneyimi:** Yapay zeka ses tanima ile manuel bütce tutma zorlugunun asilmasi ve 3D sanal evcil hayvan oyunlastirma ogeleriyle yuksek baglilik saglanmasi.
-*   **Uretken Yapay Zeka Kullanimi:** Gemini Flash ve Whisper modellerinin entegrasyonu, kullanici harcama aliskanliklarinin AI ile analiz edilerek kisisel tasarruf tavsiyelerine donusturulmesi.
+*   **Teknolojik Yetkinlik:** Node.js, Express, Python FastAPI, PostgreSQL, Prisma ORM, Zod, JWT gibi modern ve güvenli teknolojilerin kullanımı.
+*   **Kullanıcı Deneyimi:** Yapay zeka ses tanıma ile manuel bütçe tutma zorluğunun aşılması ve temiz arayüz elemanlarıyla yüksek bağlılık sağlanması.
+*   **Üretken Yapay Zeka Kullanımı:** Gemini Flash ve Whisper modellerinin entegrasyonu, kullanıcı harcama alışkanlıklarının AI ile analiz edilerek kişisel tasarruf tavsiyelerine dönüştürülmesi.
